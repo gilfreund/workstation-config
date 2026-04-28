@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "__USER_HOME__"
+      ],
+      "autoApprove": [
+        "move_file"
+      ]
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@cyanheads/git-mcp-server"
+      ]
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ]
+    },
+    "ssh": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@fangjunjie/ssh-mcp-server",
+        "--config-file",
+        "__USER_HOME__/.kiro/settings/ssh-mcp-servers.json",
+        "--whitelist",
+        "^ls(\\s|$),^cat(\\s|$),^head(\\s|$),^tail(\\s|$),^grep(\\s|$),^find(\\s|$),^wc(\\s|$),^df(\\s|$),^du(\\s|$),^free(\\s|$),^uptime$,^hostname$,^whoami$,^pwd$,^echo(\\s|$),^docker(\\s|$),^git(\\s|$)",
+        "--blacklist",
+        "^sudo(\\s|$)"
+      ]
+    }
+  },
+  "autoApprove": [
+    "filesystem",
+    "git",
+    "fetch"
+  ]
+}

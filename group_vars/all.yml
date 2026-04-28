@@ -1,0 +1,60 @@
+---
+# User configuration
+user_name: "{{ ansible_user_id }}"
+user_home: "{{ ansible_env.HOME }}"
+git_user_name: "Your Name"
+git_user_email: "you@example.com"
+github_username: "your-github-username"
+
+# Dotfiles: Ansible copy strategy
+# Files are copied from files/dotfiles/ to $HOME.
+# Use the export script to populate files/dotfiles/ from your current machine.
+dotfiles_allowlist:
+  - .zshrc
+  - .bashrc
+  - .gitconfig
+  - .gitignore_global
+  - .tmux.conf
+  - .vimrc
+
+# Files handled as Jinja2 templates instead of plain copy
+# (contain identity variables like git_user_name, github_username)
+dotfiles_templated:
+  - .gitconfig
+
+# Dotfile directories (copied recursively)
+dotfiles_dirs:
+  - .config/nvim
+  - .config/ghostty
+  - .config/gh
+  - .config/iterm2
+  - .config/karabiner
+  - .aws
+  - .kiro
+
+# Files to exclude even if inside an allowed directory
+dotfiles_exclude:
+  - .aws/credentials
+  - .aws/sso/cache/*
+  - .aws/cli/cache/*
+
+# AWS credentials — stored as ansible-vault encrypted file
+aws_credentials_vault: true
+
+# Application config backup/restore toggles
+# Set to false to skip export and restore for specific apps.
+app_configs:
+  vscode: true
+  iterm2: true
+  hiddenbar: true
+  cyberduck: true
+
+# Mackup
+mackup_enabled: false
+mackup_storage_engine: icloud
+
+# Kiro SSH MCP servers (environment-specific, populated by export)
+# Override in a local vars file or group_vars/secrets.yml
+kiro_ssh_servers: []
+# Example:
+#   - { name: "server1", host: "server1.example.com", port: 22, username: "admin", privateKey: "{{ user_home }}/.ssh/id_ed25519" }

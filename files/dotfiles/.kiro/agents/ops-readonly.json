@@ -1,0 +1,6 @@
+{
+  "name": "ops-readonly",
+  "description": "Read-only operations agent for infrastructure hosts",
+  "promptFile": "ops-readonly-prompt.md",
+  "allowedTools": ["filesystem", "git", "fetch"]
+}

@@ -1,0 +1,184 @@
+---
+# --- Dock ---
+- name: "Dock: autohide"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: autohide
+    type: bool
+    value: "{{ dock_autohide }}"
+  notify: restart dock
+
+- name: "Dock: icon size"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: tilesize
+    type: float
+    value: "{{ dock_tilesize }}"
+  notify: restart dock
+
+- name: "Dock: orientation"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: orientation
+    type: string
+    value: "{{ dock_orientation }}"
+  notify: restart dock
+
+- name: "Dock: minimize effect"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: mineffect
+    type: string
+    value: "{{ dock_minimize_effect }}"
+  notify: restart dock
+
+- name: "Dock: show recent applications"
+  community.general.osx_defaults:
+    domain: com.apple.dock
+    key: show-recents
+    type: bool
+    value: "{{ dock_show_recents }}"
+  notify: restart dock
+
+# --- Dock apps (dockutil) ---
+- name: Check if dockutil is installed
+  ansible.builtin.command: which dockutil
+  register: dockutil_check
+  changed_when: false
+  failed_when: false
+
+- name: Manage Dock app layout
+  when:
+    - dockutil_check.rc == 0
+    - dock_apps | default([]) | length > 0
+  block:
+    - name: Get current Dock apps
+      ansible.builtin.command: dockutil --list
+      register: dock_current
+      changed_when: false
+
+    - name: Remove all Dock items
+      ansible.builtin.command: dockutil --remove all --no-restart
+      changed_when: true
+
+    - name: Add Dock apps in order
+      ansible.builtin.command: >
+        dockutil --add '{{ item }}' --no-restart
+      loop: "{{ dock_apps }}"
+      register: dock_add
+      changed_when: dock_add.rc == 0
+      failed_when: false
+
+    - name: Restart Dock after layout change
+      ansible.builtin.command: killall Dock
+      changed_when: true
+
+# --- Finder ---
+- name: "Finder: show hidden files"
+  community.general.osx_defaults:
+    domain: com.apple.finder
+    key: AppleShowAllFiles
+    type: bool
+    value: "{{ finder_show_hidden }}"
+  notify: restart finder
+
+- name: "Finder: show path bar"
+  community.general.osx_defaults:
+    domain: com.apple.finder
+    key: ShowPathbar
+    type: bool
+    value: "{{ finder_show_pathbar }}"
+  notify: restart finder
+
+- name: "Finder: show status bar"
+  community.general.osx_defaults:
+    domain: com.apple.finder
+    key: ShowStatusBar
+    type: bool
+    value: "{{ finder_show_statusbar }}"
+  notify: restart finder
+
+- name: "Finder: default view style"
+  community.general.osx_defaults:
+    domain: com.apple.finder
+    key: FXPreferredViewStyle
+    type: string
+    value: "{{ finder_default_view }}"
+  notify: restart finder
+
+- name: "Finder: show all file extensions"
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: AppleShowAllExtensions
+    type: bool
+    value: "{{ finder_show_extensions }}"
+  notify: restart finder
+
+# --- Trackpad ---
+- name: "Trackpad: tap to click"
+  community.general.osx_defaults:
+    domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+    key: Clicking
+    type: bool
+    value: "{{ trackpad_tap_to_click }}"
+
+- name: "Trackpad: tap to click (multitouch)"
+  community.general.osx_defaults:
+    domain: com.apple.AppleMultitouchTrackpad
+    key: Clicking
+    type: bool
+    value: "{{ trackpad_tap_to_click }}"
+
+- name: "Trackpad: natural scrolling"
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: com.apple.swipescrolldirection
+    type: bool
+    value: "{{ trackpad_natural_scroll }}"
+
+# --- Keyboard ---
+- name: "Keyboard: key repeat rate"
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: KeyRepeat
+    type: int
+    value: "{{ keyboard_repeat_rate }}"
+
+- name: "Keyboard: initial key repeat delay"
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: InitialKeyRepeat
+    type: int
+    value: "{{ keyboard_initial_repeat }}"
+
+# --- Screenshots ---
+- name: Ensure screenshot directory exists
+  ansible.builtin.file:
+    path: "{{ screenshot_location }}"
+    state: directory
+    owner: "{{ user_name }}"
+    mode: "0755"
+
+- name: "Screenshots: save location"
+  community.general.osx_defaults:
+    domain: com.apple.screencapture
+    key: location
+    type: string
+    value: "{{ screenshot_location }}"
+  notify: restart systemuiserver
+
+- name: "Screenshots: format"
+  community.general.osx_defaults:
+    domain: com.apple.screencapture
+    key: type
+    type: string
+    value: "{{ screenshot_format }}"
+  notify: restart systemuiserver
+
+- name: "Screenshots: disable shadow"
+  community.general.osx_defaults:
+    domain: com.apple.screencapture
+    key: disable-shadow
+    type: bool
+    value: "{{ screenshot_disable_shadow }}"
+  notify: restart systemuiserver

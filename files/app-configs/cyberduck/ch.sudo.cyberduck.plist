@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSTableView Columns v3 ListBrowserView</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVVBcnJheYABrxApCwweKSorLC0uLzU/QEFL
+	TE1XWFljZGVmcHF7fIaHkZKcnaeosrO9vr9VJG51bGzSDQ4PHVpOUy5vYmplY3RzViRj
+	bGFzc60QERITFBUWFxgZGhscgAKACoANgBCAE4AXgBmAG4AdgB+AIYAjgCWAKNMfDQ4g
+	JChXTlMua2V5c6MhIiOAA4AEgAWjJSYngAaAB4AIgAlaSWRlbnRpZmllclVXaWR0aFZI
+	aWRkZW5UaWNvbiNANAAAAAAAAAjSMDEyM1okY2xhc3NuYW1lWCRjbGFzc2VzXE5TRGlj
+	dGlvbmFyeaIyNFhOU09iamVjdNMfDQ42OiijISIjgAOABIAFozs8J4ALgAyACIAJWGZp
+	bGVuYW1lI0BZAAAAAAAA0x8NDkJGKKMhIiOAA4AEgAWjR0gngA6AD4AIgAlUc2l6ZSNA
+	VaAAAAAAANMfDQ5OUiijISIjgAOABIAFo1NUJ4ARgBKACIAJWG1vZGlmaWVkI0BpcAAA
+	AAAA0x8NDlpeKKMhIiOAA4AEgAWjX2BhgBSAFYAWgAlVb3duZXIjQFQAAAAAAAAJ0x8N
+	DmdrKKMhIiOAA4AEgAWjbGBhgBiAFYAWgAlVZ3JvdXDTHw0OcnYooyEiI4ADgASABaN3
+	PGGAGoAMgBaACVpwZXJtaXNzaW9u0x8NDn2BKKMhIiOAA4AEgAWjgmBhgByAFYAWgAlU
+	a2luZNMfDQ6IjCijISIjgAOABIAFo41gYYAegBWAFoAJWWV4dGVuc2lvbtMfDQ6Tlyij
+	ISIjgAOABIAFo5hgYYAggBWAFoAJVnJlZ2lvbtMfDQ6eoiijISIjgAOABIAFo6NgYYAi
+	gBWAFoAJV3ZlcnNpb27THw0Oqa0ooyEiI4ADgASABaOuYGGAJIAVgBaACVhjaGVja3N1
+	bdMfDQ60uCijISIjgAOABIAFo7m6J4AmgCeACIAJXHN0b3JhZ2VjbGFzcyNAYzAAAAAA
+	ANIwMcDBXk5TTXV0YWJsZUFycmF5o8DCNFdOU0FycmF5AAgAEQAaACQAKQAyADcASQBM
+	AFIAVACAAIYAiwCWAJ0AqwCtAK8AsQCzALUAtwC5ALsAvQC/AMEAwwDFAMcAzgDWANoA
+	3ADeAOAA5ADmAOgA6gDsAPcA/QEEAQkBEgETARgBIwEsATkBPAFFAUwBUAFSAVQBVgFa
+	AVwBXgFgAWIBawF0AXsBfwGBAYMBhQGJAYsBjQGPAZEBlgGfAaYBqgGsAa4BsAG0AbYB
+	uAG6AbwBxQHOAdUB2QHbAd0B3wHjAeUB5wHpAesB8QH6AfsCAgIGAggCCgIMAhACEgIU
+	AhYCGAIeAiUCKQIrAi0CLwIzAjUCNwI5AjsCRgJNAlECUwJVAlcCWwJdAl8CYQJjAmgC
+	bwJzAnUCdwJ5An0CfwKBAoMChQKPApYCmgKcAp4CoAKkAqYCqAKqAqwCswK6Ar4CwALC
+	AsQCyALKAswCzgLQAtgC3wLjAuUC5wLpAu0C7wLxAvMC9QL+AwUDCQMLAw0DDwMTAxUD
+	FwMZAxsDKAMxAzYDRQNJAAAAAAAAAgEAAAAAAAAAwwAAAAAAAAAAAAAAAAAAA1E=
+	</data>
+	<key>NSTableView Columns v3 Metadata</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVVBcnJheYABrgsMEx4fICEiIyQqNDU2VSRu
+	dWxs0g0ODxJaTlMub2JqZWN0c1YkY2xhc3OiEBGAAoAKgA3TFA0OFRkdV05TLmtleXOj
+	FhcYgAOABIAFoxobHIAGgAeACIAJWklkZW50aWZpZXJVV2lkdGhWSGlkZGVuVE5BTUUj
+	QHD4AAAAAAAI0iUmJyhaJGNsYXNzbmFtZVgkY2xhc3Nlc1xOU0RpY3Rpb25hcnmiJylY
+	TlNPYmplY3TTFA0OKy8doxYXGIADgASABaMwMRyAC4AMgAiACVVWQUxVRSNAcPgAAAAA
+	ANIlJjc4Xk5TTXV0YWJsZUFycmF5ozc5KVdOU0FycmF5AAgAEQAaACQAKQAyADcASQBM
+	AFIAVABjAGkAbgB5AIAAgwCFAIcAiQCQAJgAnACeAKAAogCmAKgAqgCsAK4AuQC/AMYA
+	ywDUANUA2gDlAO4A+wD+AQcBDgESARQBFgEYARwBHgEgASIBJAEqATMBOAFHAUsAAAAA
+	AAACAQAAAAAAAAA6AAAAAAAAAAAAAAAAAAABUw==
+	</data>
+	<key>NSTableView Columns v3 OutlineBrowserView</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVVBcnJheYABrxAnCwwdKCkqKywtLjQ+P0BK
+	S0xWV1hZY2Rub3B6e4WGkJGbnKansbKzVSRudWxs0g0ODxxaTlMub2JqZWN0c1YkY2xh
+	c3OsEBESExQVFhcYGRobgAKACoANgBCAFIAWgBmAG4AdgB+AIYAjgCbTHg0OHyMnV05T
+	LmtleXOjICEigAOABIAFoyQlJoAGgAeACIAJWklkZW50aWZpZXJVV2lkdGhWSGlkZGVu
+	WGZpbGVuYW1lI0CAqAAAAAAACNIvMDEyWiRjbGFzc25hbWVYJGNsYXNzZXNcTlNEaWN0
+	aW9uYXJ5ojEzWE5TT2JqZWN00x4NDjU5J6MgISKAA4AEgAWjOjsmgAuADIAIgAlUc2l6
+	ZSNAYsAAAAAAANMeDQ5BRSejICEigAOABIAFo0ZHJoAOgA+ACIAJWG1vZGlmaWVkI0Bw
+	sAAAAAAA0x4NDk1RJ6MgISKAA4AEgAWjUlNUgBGAEoATgAlVb3duZXIjQFQAAAAAAAAJ
+	0x4NDlpeJ6MgISKAA4AEgAWjX1NUgBWAEoATgAlVZ3JvdXDTHg0OZWknoyAhIoADgASA
+	BaNqa1SAF4AYgBOACVpwZXJtaXNzaW9uI0BZAAAAAAAA0x4NDnF1J6MgISKAA4AEgAWj
+	dlNUgBqAEoATgAlUa2luZNMeDQ58gCejICEigAOABIAFo4FTVIAcgBKAE4AJWWV4dGVu
+	c2lvbtMeDQ6HiyejICEigAOABIAFo4xTVIAegBKAE4AJVnJlZ2lvbtMeDQ6SliejICEi
+	gAOABIAFo5dTVIAggBKAE4AJV3ZlcnNpb27THg0OnaEnoyAhIoADgASABaOiU1SAIoAS
+	gBOACVhjaGVja3N1bdMeDQ6orCejICEigAOABIAFo62uJoAkgCWACIAJXHN0b3JhZ2Vj
+	bGFzcyNAayAAAAAAANIvMLS1Xk5TTXV0YWJsZUFycmF5o7S2M1dOU0FycmF5AAgAEQAa
+	ACQAKQAyADcASQBMAFIAVAB+AIQAiQCUAJsAqACqAKwArgCwALIAtAC2ALgAugC8AL4A
+	wADCAMkA0QDVANcA2QDbAN8A4QDjAOUA5wDyAPgA/wEIAREBEgEXASIBKwE4ATsBRAFL
+	AU8BUQFTAVUBWQFbAV0BXwFhAWYBbwF2AXoBfAF+AYABhAGGAYgBigGMAZUBngGlAakB
+	qwGtAa8BswG1AbcBuQG7AcEBygHLAdIB1gHYAdoB3AHgAeIB5AHmAegB7gH1AfkB+wH9
+	Af8CAwIFAgcCCQILAhYCHwImAioCLAIuAjACNAI2AjgCOgI8AkECSAJMAk4CUAJSAlYC
+	WAJaAlwCXgJoAm8CcwJ1AncCeQJ9An8CgQKDAoUCjAKTApcCmQKbAp0CoQKjAqUCpwKp
+	ArECuAK8Ar4CwALCAsYCyALKAswCzgLXAt4C4gLkAuYC6ALsAu4C8ALyAvQDAQMKAw8D
+	HgMiAAAAAAAAAgEAAAAAAAAAtwAAAAAAAAAAAAAAAAAAAyo=
+	</data>
+	<key>NSTableView Columns v3 Versions</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVVBcnJheYABrxATCwwVICEiIyQlJiw2NzhC
+	Q01OT1UkbnVsbNINDg8UWk5TLm9iamVjdHNWJGNsYXNzpBAREhOAAoAKgA2AD4AS0xYN
+	DhcbH1dOUy5rZXlzoxgZGoADgASABaMcHR6ABoAHgAiACVpJZGVudGlmaWVyVVdpZHRo
+	VkhpZGRlbllUSU1FU1RBTVAjQGUgAAAAAAAI0icoKSpaJGNsYXNzbmFtZVgkY2xhc3Nl
+	c1xOU0RpY3Rpb25hcnmiKStYTlNPYmplY3TTFg0OLTEfoxgZGoADgASABaMyMx6AC4AM
+	gAiACVhDSEVDS1NVTSNAXsAAAAAAANMWDQ45PR+jGBkagAOABIAFoz4zHoAOgAyACIAJ
+	VFNJWkXTFg0OREgfoxgZGoADgASABaNJSh6AEIARgAiACVVPV05FUiNAXoAAAAAAANIn
+	KFBRXk5TTXV0YWJsZUFycmF5o1BSK1dOU0FycmF5AAgAEQAaACQAKQAyADcASQBMAFIA
+	VABqAHAAdQCAAIcAjACOAJAAkgCUAJYAnQClAKkAqwCtAK8AswC1ALcAuQC7AMYAzADT
+	AN0A5gDnAOwA9wEAAQ0BEAEZASABJAEmASgBKgEuATABMgE0ATYBPwFIAU8BUwFVAVcB
+	WQFdAV8BYQFjAWUBagFxAXUBdwF5AXsBfwGBAYMBhQGHAY0BlgGbAaoBrgAAAAAAAAIB
+	AAAAAAAAAFMAAAAAAAAAAAAAAAAAAAG2
+	</data>
+	<key>NSTableView Sort Ordering v2 ListBrowserView</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVVBcnJheYABowsMEVUkbnVsbNINDg8QWk5T
+	Lm9iamVjdHNWJGNsYXNzoIAC0hITFBVaJGNsYXNzbmFtZVgkY2xhc3Nlc15OU011dGFi
+	bGVBcnJheaMUFhdXTlNBcnJheVhOU09iamVjdAgRGiQpMjdJTFJUWF5jbnV2eH2IkaCk
+	rAAAAAAAAAEBAAAAAAAAABgAAAAAAAAAAAAAAAAAAAC1
+	</data>
+	<key>NSTableView Sort Ordering v2 Metadata</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVVBcnJheYABowsMEVUkbnVsbNINDg8QWk5T
+	Lm9iamVjdHNWJGNsYXNzoIAC0hITFBVaJGNsYXNzbmFtZVgkY2xhc3Nlc15OU011dGFi
+	bGVBcnJheaMUFhdXTlNBcnJheVhOU09iamVjdAgRGiQpMjdJTFJUWF5jbnV2eH2IkaCk
+	rAAAAAAAAAEBAAAAAAAAABgAAAAAAAAAAAAAAAAAAAC1
+	</data>
+	<key>NSTableView Sort Ordering v2 OutlineBrowserView</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVVBcnJheYABowsMEVUkbnVsbNINDg8QWk5T
+	Lm9iamVjdHNWJGNsYXNzoIAC0hITFBVaJGNsYXNzbmFtZVgkY2xhc3Nlc15OU011dGFi
+	bGVBcnJheaMUFhdXTlNBcnJheVhOU09iamVjdAgRGiQpMjdJTFJUWF5jbnV2eH2IkaCk
+	rAAAAAAAAAEBAAAAAAAAABgAAAAAAAAAAAAAAAAAAAC1
+	</data>
+	<key>NSTableView Sort Ordering v2 Versions</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVVBcnJheYABowsMEVUkbnVsbNINDg8QWk5T
+	Lm9iamVjdHNWJGNsYXNzoIAC0hITFBVaJGNsYXNzbmFtZVgkY2xhc3Nlc15OU011dGFi
+	bGVBcnJheaMUFhdXTlNBcnJheVhOU09iamVjdAgRGiQpMjdJTFJUWF5jbnV2eH2IkaCk
+	rAAAAAAAAAEBAAAAAAAAABgAAAAAAAAAAAAAAAAAAAC1
+	</data>
+	<key>NSTableView Supports v2 ListBrowserView</key>
+	<true/>
+	<key>NSTableView Supports v2 Metadata</key>
+	<true/>
+	<key>NSTableView Supports v2 OutlineBrowserView</key>
+	<true/>
+	<key>NSTableView Supports v2 Versions</key>
+	<true/>
+	<key>NSToolbar Configuration Cyberduck Toolbar</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>1</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<integer>1</integer>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSToolbar Configuration Transfer Toolbar</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>3</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<integer>1</integer>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSWindow Frame 1010bbcd-e652-40fe-808d-17c75f0a03bb</key>
+	<string>206 121 1138 754 0 0 1440 875 </string>
+	<key>NSWindow Frame 3aa0033c-a389-467b-a3c5-f8866c1d6681</key>
+	<string>156 326 1232 479 0 0 1440 875 </string>
+	<key>NSWindow Frame 46ba12be-fc44-46b8-b36c-c329e5ad41b1</key>
+	<string>0 126 1440 749 0 0 1440 875 </string>
+	<key>NSWindow Frame 46d639ff-cea7-404e-8f1d-b51c35eaa4c2</key>
+	<string>199 278 1042 452 0 0 1440 875 </string>
+	<key>NSWindow Frame Bookmark</key>
+	<string>398 122 476 593 0 0 1440 875 </string>
+	<key>NSWindow Frame Browser</key>
+	<string>469 315 1202 565 0 0 1920 1055 </string>
+	<key>NSWindow Frame Connection</key>
+	<string>471 344 499 296 0 0 1440 875 </string>
+	<key>NSWindow Frame Info</key>
+	<string>1012 532 600 455 0 0 1920 1055 </string>
+	<key>NSWindow Frame Login</key>
+	<string>661 339 420 294 0 0 1920 1055 </string>
+	<key>NSWindow Frame Preferences</key>
+	<string>660 642 600 296 0 0 1920 1055 </string>
+	<key>NSWindow Frame SUUpdateAlert</key>
+	<string>410 149 620 699 0 0 1440 875 </string>
+	<key>NSWindow Frame SUUpdateAlert2</key>
+	<string>454 375 557 398 0 0 1440 875 </string>
+	<key>NSWindow Frame Transfers</key>
+	<string>2315 177 630 439 1920 84 1440 875 </string>
+	<key>NSWindow Frame Validator</key>
+	<string>2346 139 439 453 1920 84 1440 875 </string>
+	<key>NSWindow Frame af8cdcc6-971d-4bdd-9e79-9ea6d5360caa</key>
+	<string>73 121 1138 754 0 0 1440 875 </string>
+	<key>NSWindow Frame c1f191de-f140-415b-8628-416d8a71d021</key>
+	<string>469 315 1202 565 0 0 1920 1055 </string>
+	<key>SUAutomaticallyUpdate</key>
+	<false/>
+	<key>SUEnableAutomaticChecks</key>
+	<false/>
+	<key>SUHasLaunchedBefore</key>
+	<true/>
+	<key>SULastCheckTime</key>
+	<date>2026-01-14T07:01:23Z</date>
+	<key>SUSendProfileInfo</key>
+	<false/>
+	<key>SUSkippedVersion</key>
+	<string>44136</string>
+	<key>SUUpdateGroupIdentifier</key>
+	<integer>567103530</integer>
+	<key>bookmark.1010bbcd-e652-40fe-808d-17c75f0a03bb</key>
+	<string>5</string>
+	<key>bookmark.46ba12be-fc44-46b8-b36c-c329e5ad41b1</key>
+	<string>2</string>
+	<key>bookmark.46d639ff-cea7-404e-8f1d-b51c35eaa4c2</key>
+	<string>0</string>
+	<key>bookmark.a52233c3-ebd2-4ec7-8523-96be4fb821a2</key>
+	<string>1</string>
+	<key>bookmark.af8cdcc6-971d-4bdd-9e79-9ea6d5360caa</key>
+	<string>4</string>
+	<key>bookmark.c1f191de-f140-415b-8628-416d8a71d021</key>
+	<string>3</string>
+	<key>bookmark.import.com.crossftp</key>
+	<string>true</string>
+	<key>bookmark.import.com.eltima.cloudmounter</key>
+	<string>true</string>
+	<key>bookmark.import.com.expandrive.ExpanDrive</key>
+	<string>true</string>
+	<key>bookmark.import.com.expandrive.ExpanDrive3</key>
+	<string>true</string>
+	<key>bookmark.import.com.expandrive.ExpanDrive34</key>
+	<string>true</string>
+	<key>bookmark.import.com.expandrive.ExpanDrive35</key>
+	<string>true</string>
+	<key>bookmark.import.com.expandrive.ExpanDrive36</key>
+	<string>true</string>
+	<key>bookmark.import.com.extendmac.Flow</key>
+	<string>true</string>
+	<key>bookmark.import.com.fetchsoftworks.Fetch</key>
+	<string>true</string>
+	<key>bookmark.import.com.nolobe.interarchy</key>
+	<string>true</string>
+	<key>bookmark.import.com.panic.Transmit</key>
+	<string>true</string>
+	<key>bookmark.import.com.panic.Transmit5</key>
+	<string>true</string>
+	<key>bookmark.import.de.filezilla</key>
+	<string>true</string>
+	<key>bookmark.import.org.mozdev.fireftp</key>
+	<string>true</string>
+	<key>bookmark.toggle.options</key>
+	<string>1</string>
+	<key>browser.column.filename.width</key>
+	<string>533.0</string>
+	<key>browser.column.modified.width</key>
+	<string>267.0</string>
+	<key>browser.column.size.width</key>
+	<string>150.0</string>
+	<key>browser.column.storageclass</key>
+	<string>true</string>
+	<key>browser.column.storageclass.width</key>
+	<string>217.0</string>
+	<key>browser.sort.ascending</key>
+	<string>false</string>
+	<key>browser.sort.column</key>
+	<string>modified</string>
+	<key>browser.view</key>
+	<string>1</string>
+	<key>defaulthandler.reminder</key>
+	<string>false</string>
+	<key>editor.bundleIdentifier</key>
+	<string>com.microsoft.vscode</string>
+	<key>editor.upload.file.versioning</key>
+	<string>true</string>
+	<key>info.toolbar.selected</key>
+	<string>5</string>
+	<key>preferences.toolbar.selected</key>
+	<string>3</string>
+	<key>profiles.profile{parent=s3, vendor=iterate gmbh, description=null, image=null}.s3-cli.enabled</key>
+	<string>true</string>
+	<key>profiles.profile{parent=s3, vendor=iterate gmbh, description=null, image=null}.s3-https.enabled</key>
+	<string>false</string>
+	<key>profiles.profile{parent=s3, vendor=iterate gmbh, description=null, image=null}.s3-token.enabled</key>
+	<string>true</string>
+	<key>profiles.s3.s3-https.enabled</key>
+	<string>true</string>
+	<key>profiles.s3.s3-token.enabled</key>
+	<string>false</string>
+	<key>queue.window.open.default</key>
+	<string>false</string>
+	<key>s3.location</key>
+	<string>eu-west-1</string>
+	<key>session.3aa0033c-a389-467b-a3c5-f8866c1d6681</key>
+	<string>0</string>
+	<key>transfer.1bcfd370-2379-4322-b488-def0ccb56f40</key>
+	<string>0</string>
+	<key>transfer.2a822bff-66fb-4d84-a5de-239df1735073</key>
+	<string>4</string>
+	<key>transfer.3ce4c448-8b3e-42b0-af81-1134cd874906</key>
+	<string>14</string>
+	<key>transfer.48203405-2472-4155-b69a-e03376516e83</key>
+	<string>11</string>
+	<key>transfer.768acd99-6a39-458e-a633-7c460caa5193</key>
+	<string>19</string>
+	<key>transfer.8a081070-1ca2-4aca-a1bf-b67708d213f2</key>
+	<string>13</string>
+	<key>transfer.8ecde958-c5d7-47a2-ba12-3cee8c8f2f49</key>
+	<string>18</string>
+	<key>transfer.90326a52-b810-4109-b0e7-61757612f956</key>
+	<string>1</string>
+	<key>transfer.9d6f930d-8428-4f87-a0cc-528225f11374</key>
+	<string>12</string>
+	<key>transfer.a48f455d-b457-4c49-8b7d-9b41f6240c9c</key>
+	<string>17</string>
+	<key>transfer.a7fcafb7-a343-42fb-9af5-19b5b9e21a03</key>
+	<string>7</string>
+	<key>transfer.b94ad959-20c1-4a7c-a3af-381e7017a45a</key>
+	<string>3</string>
+	<key>transfer.c52ae205-c425-4be6-8046-c5fd29e93974</key>
+	<string>5</string>
+	<key>transfer.da9871bb-96a0-4510-99d9-44abb231abb8</key>
+	<string>16</string>
+	<key>transfer.efaeb62c-9285-464e-94bc-736a106f92ca</key>
+	<string>6</string>
+	<key>transfer.f347e651-c90b-4eec-a4c5-58f5365dedbb</key>
+	<string>15</string>
+	<key>transfer.f3fb7353-3072-49dd-9a7b-1ef0fe7377db</key>
+	<string>9</string>
+	<key>transfer.f6418803-f147-4464-8028-afd11059e93a</key>
+	<string>2</string>
+	<key>transfer.fc66f977-1435-46b6-a99a-be669cc3d742</key>
+	<string>8</string>
+	<key>transfer.fd37f80b-c8a7-41fe-a7cf-9acf287cccc6</key>
+	<string>10</string>
+	<key>transfer.toggle.details</key>
+	<string>1</string>
+	<key>update.check.timestamp</key>
+	<string>1750493230185</string>
+	<key>uses</key>
+	<string>62</string>
+</dict>
+</plist>

@@ -1,0 +1,12 @@
+---
+- name: restart dock
+  ansible.builtin.command: killall Dock
+  listen: restart dock
+
+- name: restart finder
+  ansible.builtin.command: killall Finder
+  listen: restart finder
+
+- name: restart systemuiserver
+  ansible.builtin.command: killall SystemUIServer
+  listen: restart systemuiserver

@@ -1,0 +1,4 @@
+{
+  "defaultAgent": "ops-readonly",
+  "trustedCommands": ["git status", "git diff", "git log *", "git show *", "npm view *", "npm ls *", "npm run lint*", "fetch *", "ls *", "pwd", "whoami", "uname *", "cat *", "grep *", "head *", "tail *", "find *"]
+}

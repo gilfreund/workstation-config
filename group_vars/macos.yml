@@ -1,0 +1,57 @@
+---
+# Homebrew
+homebrew_brewfile: "{{ playbook_dir }}/Brewfile"
+
+# macOS preference domains to export (used by collection scripts)
+mac_settings_domains:
+  - com.apple.dock
+  - com.apple.finder
+  - com.apple.driver.AppleBluetoothMultitouch.trackpad
+  - com.apple.AppleMultitouchTrackpad
+  - com.apple.screencapture
+  - com.apple.systemuiserver
+  - NSGlobalDomain
+
+# Dock
+dock_autohide: true
+dock_tilesize: 48
+dock_orientation: bottom       # left, bottom, right
+dock_minimize_effect: scale    # genie, scale
+dock_show_recents: false
+
+# Dock apps (managed by dockutil, in order)
+# Use app names as they appear in /Applications or full paths.
+# Set to empty list to skip Dock app management.
+dock_apps:
+  - System Settings
+  - Calendar
+  - Signal
+  - Microsoft Teams
+  - iTerm
+  - Visual Studio Code
+  - Kiro
+  - KeePassXC
+  - Thunderbird
+  - Firefox
+  - Activity Monitor
+  - Microsoft Excel
+
+# Finder
+finder_show_hidden: true
+finder_show_pathbar: true
+finder_show_statusbar: true
+finder_default_view: Nlsv      # icnv, clmv, Flwv, Nlsv (list)
+finder_show_extensions: true
+
+# Trackpad
+trackpad_tap_to_click: true
+trackpad_natural_scroll: true
+
+# Keyboard
+keyboard_repeat_rate: 2         # lower = faster (normal: 6)
+keyboard_initial_repeat: 15     # lower = shorter delay (normal: 68)
+
+# Screenshots
+screenshot_location: "{{ user_home }}/Screenshots"
+screenshot_format: png          # png, jpg, pdf, tiff
+screenshot_disable_shadow: true

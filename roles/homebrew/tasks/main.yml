@@ -1,0 +1,17 @@
+---
+- name: Ensure Homebrew is available
+  ansible.builtin.command: brew --version
+  register: brew_check
+  changed_when: false
+  failed_when: brew_check.rc != 0
+
+- name: Update Homebrew
+  community.general.homebrew:
+    update_homebrew: true
+  when: brew_check.rc == 0
+
+- name: Install packages from Brewfile
+  ansible.builtin.command:
+    cmd: brew bundle install --file={{ homebrew_brewfile }} --no-lock
+  register: brew_bundle
+  changed_when: "'Installing' in brew_bundle.stdout"

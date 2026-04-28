@@ -1,0 +1,122 @@
+---
+# --- VS Code ---
+- name: Check if VS Code is installed
+  ansible.builtin.command: which code
+  register: vscode_check
+  changed_when: false
+  failed_when: false
+  when: app_configs.vscode | default(true)
+
+- name: Restore VS Code settings
+  when:
+    - app_configs.vscode | default(true)
+    - vscode_check.rc | default(1) == 0
+  block:
+    - name: Ensure VS Code User directory exists
+      ansible.builtin.file:
+        path: "{{ user_home }}/Library/Application Support/Code/User"
+        state: directory
+        owner: "{{ user_name }}"
+        mode: "0755"
+
+    - name: Copy VS Code settings.json
+      ansible.builtin.copy:
+        src: "app-configs/vscode/settings.json"
+        dest: "{{ user_home }}/Library/Application Support/Code/User/settings.json"
+        owner: "{{ user_name }}"
+        mode: "0644"
+        backup: true
+      when: lookup('fileglob', playbook_dir + '/files/app-configs/vscode/settings.json') | length > 0
+
+    - name: Expand __USER_HOME__ in VS Code settings
+      ansible.builtin.shell: >
+        sed -i '' 's|__USER_HOME__|{{ user_home }}|g'
+        '{{ user_home }}/Library/Application Support/Code/User/settings.json'
+      changed_when: true
+      when: lookup('fileglob', playbook_dir + '/files/app-configs/vscode/settings.json') | length > 0
+
+    - name: Copy VS Code keybindings.json
+      ansible.builtin.copy:
+        src: "app-configs/vscode/keybindings.json"
+        dest: "{{ user_home }}/Library/Application Support/Code/User/keybindings.json"
+        owner: "{{ user_name }}"
+        mode: "0644"
+        backup: true
+      when: lookup('fileglob', playbook_dir + '/files/app-configs/vscode/keybindings.json') | length > 0
+
+    - name: Copy VS Code snippets
+      ansible.builtin.copy:
+        src: "app-configs/vscode/snippets/"
+        dest: "{{ user_home }}/Library/Application Support/Code/User/snippets/"
+        owner: "{{ user_name }}"
+        mode: "0644"
+        backup: true
+      when: lookup('fileglob', playbook_dir + '/files/app-configs/vscode/snippets/*') | length > 0
+
+    - name: Install VS Code extensions
+      ansible.builtin.command: code --install-extension {{ item }}
+      loop: "{{ lookup('file', playbook_dir + '/files/app-configs/vscode/extensions.txt').splitlines() }}"
+      register: vscode_ext
+      changed_when: "'was successfully installed' in vscode_ext.stdout"
+      failed_when: false
+      when: lookup('fileglob', playbook_dir + '/files/app-configs/vscode/extensions.txt') | length > 0
+
+# --- iTerm2 ---
+- name: Restore iTerm2 preferences
+  ansible.builtin.command: >
+    defaults import com.googlecode.iterm2
+    {{ playbook_dir }}/files/app-configs/iterm2/com.googlecode.iterm2.plist
+  when:
+    - app_configs.iterm2 | default(true)
+    - ansible_os_family == "Darwin"
+    - lookup('fileglob', playbook_dir + '/files/app-configs/iterm2/com.googlecode.iterm2.plist') | length > 0
+  changed_when: true
+
+# --- Hidden Bar ---
+- name: Restore Hidden Bar preferences
+  ansible.builtin.command: >
+    defaults import com.dwarvesv.minimalbar
+    {{ playbook_dir }}/files/app-configs/hiddenbar/com.dwarvesv.minimalbar.plist
+  when:
+    - app_configs.hiddenbar | default(true)
+    - ansible_os_family == "Darwin"
+    - lookup('fileglob', playbook_dir + '/files/app-configs/hiddenbar/com.dwarvesv.minimalbar.plist') | length > 0
+  changed_when: true
+
+# --- Cyberduck ---
+- name: Restore Cyberduck preferences
+  ansible.builtin.command: >
+    defaults import ch.sudo.cyberduck
+    {{ playbook_dir }}/files/app-configs/cyberduck/ch.sudo.cyberduck.plist
+  when:
+    - app_configs.cyberduck | default(true)
+    - ansible_os_family == "Darwin"
+    - lookup('fileglob', playbook_dir + '/files/app-configs/cyberduck/ch.sudo.cyberduck.plist') | length > 0
+  changed_when: true
+
+# --- Mackup (optional) ---
+- name: Check if mackup is installed
+  ansible.builtin.command: which mackup
+  register: mackup_installed
+  changed_when: false
+  failed_when: false
+  when: mackup_enabled
+
+- name: Copy mackup configuration
+  ansible.builtin.copy:
+    src: "mackup/.mackup.cfg"
+    dest: "{{ user_home }}/.mackup.cfg"
+    owner: "{{ user_name }}"
+    mode: "0644"
+    backup: true
+  when:
+    - mackup_enabled
+    - mackup_installed.rc == 0
+
+- name: Restore application settings with mackup
+  ansible.builtin.command: mackup restore --force
+  register: mackup_restore
+  changed_when: "'Restored' in mackup_restore.stdout"
+  when:
+    - mackup_enabled
+    - mackup_installed.rc == 0

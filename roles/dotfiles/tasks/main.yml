@@ -1,0 +1,201 @@
+---
+# Strategy: direct copy from files/dotfiles/ to $HOME.
+# This is simpler than symlinks and works reliably across platforms.
+# Trade-off: changes on the target don't auto-sync back to the repo.
+# Re-run the export script to capture changes.
+
+- name: Copy individual dotfiles
+  ansible.builtin.copy:
+    src: "dotfiles/{{ item }}"
+    dest: "{{ user_home }}/{{ item }}"
+    owner: "{{ user_name }}"
+    mode: "0644"
+    backup: true
+  loop: "{{ dotfiles_allowlist }}"
+  when:
+    - item not in dotfiles_templated | default([])
+    - lookup('fileglob', playbook_dir + '/files/dotfiles/' + item) | length > 0
+
+# Templated dotfiles (contain identity variables)
+- name: Deploy .gitconfig from template
+  ansible.builtin.template:
+    src: .gitconfig.j2
+    dest: "{{ user_home }}/.gitconfig"
+    owner: "{{ user_name }}"
+    mode: "0644"
+    backup: true
+  when: lookup('fileglob', playbook_dir + '/roles/dotfiles/templates/.gitconfig.j2') | length > 0
+
+- name: Deploy gh hosts.yml from template
+  ansible.builtin.template:
+    src: gh_hosts.yml.j2
+    dest: "{{ user_home }}/.config/gh/hosts.yml"
+    owner: "{{ user_name }}"
+    mode: "0644"
+    backup: true
+  when: lookup('fileglob', playbook_dir + '/roles/dotfiles/templates/gh_hosts.yml.j2') | length > 0
+
+- name: Deploy Kiro SSH MCP servers from template
+  ansible.builtin.template:
+    src: ssh-mcp-servers.json.j2
+    dest: "{{ user_home }}/.kiro/settings/ssh-mcp-servers.json"
+    owner: "{{ user_name }}"
+    mode: "0644"
+    backup: true
+  when: kiro_ssh_servers | default([]) | length > 0
+
+- name: Ensure dotfile parent directories exist
+  ansible.builtin.file:
+    path: "{{ user_home }}/{{ item }}"
+    state: directory
+    owner: "{{ user_name }}"
+    mode: "0755"
+  loop: "{{ dotfiles_dirs }}"
+
+- name: Copy dotfile directories
+  ansible.builtin.copy:
+    src: "dotfiles/{{ item }}/"
+    dest: "{{ user_home }}/{{ item }}/"
+    owner: "{{ user_name }}"
+    mode: preserve
+    backup: true
+  loop: "{{ dotfiles_dirs }}"
+  when: lookup('fileglob', playbook_dir + '/files/dotfiles/' + item + '/*') | length > 0
+
+- name: Expand __USER_HOME__ placeholder in copied dotfiles
+  ansible.builtin.shell: |
+    find {{ user_home }}/{{ item }} -type f \( -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.plist' -o -name '*.cfg' -o -name '*.conf' \) -exec \
+      sed -i '' 's|__USER_HOME__|{{ user_home }}|g' {} +
+  loop: "{{ dotfiles_dirs }}"
+  changed_when: true
+  when: ansible_os_family == "Darwin"
+
+- name: Expand __USER_HOME__ placeholder in copied dotfiles (Linux)
+  ansible.builtin.shell: |
+    find {{ user_home }}/{{ item }} -type f \( -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.plist' -o -name '*.cfg' -o -name '*.conf' \) -exec \
+      sed -i 's|__USER_HOME__|{{ user_home }}|g' {} +
+  loop: "{{ dotfiles_dirs }}"
+  changed_when: true
+  when: ansible_os_family != "Darwin"
+
+# --- .ssh directory (vault-encrypted) ---
+- name: Check if dot_ssh vault exists
+  ansible.builtin.stat:
+    path: "{{ playbook_dir }}/files/secrets/dot_ssh.vault"
+  register: dot_ssh_vault
+
+- name: Decrypt and extract .ssh directory
+  when: dot_ssh_vault.stat.exists | default(false)
+  block:
+    - name: Copy vault-encrypted ssh archive to temp
+      ansible.builtin.copy:
+        src: "secrets/dot_ssh.vault"
+        dest: "/tmp/.dot_ssh_restore.tar"
+        owner: "{{ user_name }}"
+        mode: "0600"
+
+    - name: Extract .ssh archive to home
+      ansible.builtin.command:
+        cmd: tar xf /tmp/.dot_ssh_restore.tar -C {{ user_home }}
+      changed_when: true
+
+    - name: Set .ssh directory permissions
+      ansible.builtin.file:
+        path: "{{ user_home }}/.ssh"
+        state: directory
+        owner: "{{ user_name }}"
+        mode: "0700"
+        recurse: false
+
+    - name: Fix .ssh file permissions
+      ansible.builtin.shell: |
+        find {{ user_home }}/.ssh -type f -exec chmod 600 {} \;
+        find {{ user_home }}/.ssh -type d -exec chmod 700 {} \;
+        [ -f {{ user_home }}/.ssh/config ] && chmod 600 {{ user_home }}/.ssh/config || true
+        [ -f {{ user_home }}/.ssh/*.pub ] && chmod 644 {{ user_home }}/.ssh/*.pub || true
+      changed_when: true
+
+    - name: Clean up temp archive
+      ansible.builtin.file:
+        path: /tmp/.dot_ssh_restore.tar
+        state: absent
+
+# --- AWS ---
+- name: Ensure .aws directory has correct permissions
+  ansible.builtin.file:
+    path: "{{ user_home }}/.aws"
+    state: directory
+    owner: "{{ user_name }}"
+    mode: "0700"
+
+- name: Deploy vault-encrypted AWS credentials
+  ansible.builtin.copy:
+    src: "secrets/aws_credentials.vault"
+    dest: "{{ user_home }}/.aws/credentials"
+    owner: "{{ user_name }}"
+    mode: "0600"
+    backup: true
+  when:
+    - aws_credentials_vault | default(false)
+    - lookup('fileglob', playbook_dir + '/files/secrets/aws_credentials.vault') | length > 0
+
+- name: Deploy vault-encrypted AWS config
+  ansible.builtin.copy:
+    src: "secrets/aws_config.vault"
+    dest: "{{ user_home }}/.aws/config"
+    owner: "{{ user_name }}"
+    mode: "0600"
+    backup: true
+  when:
+    - aws_credentials_vault | default(false)
+    - lookup('fileglob', playbook_dir + '/files/secrets/aws_config.vault') | length > 0
+
+# --- .secrets directory ---
+- name: Ensure rclone config directory exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/rclone"
+    state: directory
+    owner: "{{ user_name }}"
+    mode: "0700"
+
+- name: Deploy vault-encrypted rclone config
+  ansible.builtin.copy:
+    src: "secrets/rclone_conf.vault"
+    dest: "{{ user_home }}/.config/rclone/rclone.conf"
+    owner: "{{ user_name }}"
+    mode: "0600"
+    backup: true
+  when: lookup('fileglob', playbook_dir + '/files/secrets/rclone_conf.vault') | length > 0
+
+# --- .secrets directory ---
+- name: Check if dot_secrets vault exists
+  ansible.builtin.stat:
+    path: "{{ playbook_dir }}/files/secrets/dot_secrets.vault"
+  register: dot_secrets_vault
+
+- name: Decrypt and extract .secrets directory
+  when: dot_secrets_vault.stat.exists | default(false)
+  block:
+    - name: Copy vault-encrypted secrets archive to temp
+      ansible.builtin.copy:
+        src: "secrets/dot_secrets.vault"
+        dest: "/tmp/.dot_secrets_restore.tar"
+        owner: "{{ user_name }}"
+        mode: "0600"
+
+    - name: Extract .secrets archive to home
+      ansible.builtin.command:
+        cmd: tar xf /tmp/.dot_secrets_restore.tar -C {{ user_home }}
+      changed_when: true
+
+    - name: Set .secrets directory permissions
+      ansible.builtin.file:
+        path: "{{ user_home }}/.secrets"
+        state: directory
+        owner: "{{ user_name }}"
+        mode: "0700"
+
+    - name: Clean up temp archive
+      ansible.builtin.file:
+        path: /tmp/.dot_secrets_restore.tar
+        state: absent

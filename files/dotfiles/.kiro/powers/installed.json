@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "installedPowers": [
+    {
+      "name": "cloudwatch-application-signals",
+      "registryId": "kiro-recommended"
+    },
+    {
+      "name": "aws-infrastructure-as-code",
+      "registryId": "kiro-recommended"
+    },
+    {
+      "name": "iam-policy-autopilot-power",
+      "registryId": "kiro-recommended"
+    }
+  ],
+  "dismissedAutoInstalls": []
+}

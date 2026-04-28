@@ -1,0 +1,18 @@
+---
+# Packages to install on Debian
+debian_packages:
+  - build-essential
+  - curl
+  - fd-find
+  - fzf
+  - git
+  - htop
+  - jq
+  - ripgrep
+  - shellcheck
+  - tmux
+  - tree
+  - unzip
+  - vim
+  - wget
+  - zsh

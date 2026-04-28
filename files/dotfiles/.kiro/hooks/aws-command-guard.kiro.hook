@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "AWS Command Guard",
+  "description": "Checks AWS CLI commands before execution. Allows read-only commands (list-*, describe-*, get-*) automatically. Requires confirmation for any mutating commands (create, update, delete, put, terminate, etc).",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": [
+      "shell"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if this shell command contains an AWS CLI call. If it does, check if the AWS subcommand is a read-only operation (starts with list-, describe-, get-, or is validate-template, wait, or sts get-caller-identity). If it is read-only, respond with \"APPROVED: read-only AWS command\". If the AWS command is mutating (create, update, delete, put, terminate, send, deploy, cp, push, modify, cancel, etc), respond with \"BLOCKED: This AWS command is mutating and requires user approval. Command: [show the command]\". If the command is not an AWS CLI call, respond with \"APPROVED: not an AWS command\"."
+  }
+}
