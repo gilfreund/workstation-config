@@ -232,3 +232,6 @@ else
 fi
 
 log "Bootstrap complete!"
+log ""
+log "To apply PATH changes to your current shell, run:"
+log "  exec zsh -l"
