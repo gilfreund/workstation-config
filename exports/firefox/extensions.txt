@@ -1,0 +1,7 @@
+jid1-ZAdIEUB7XOzOJw@jetpack  # DuckDuckGo Privacy Essentials
+enhancerforyoutube@maximerf.addons.mozilla.org  # Enhancer for YouTube™
+@testpilot-containers  # Firefox Multi-Account Containers
+keepassxc-browser@keepassxc.org  # KeePassXC-Browser
+78272b6fa58f4a1abaac99321d503a20@proton.me  # Proton Pass: Free Password Manager
+synofoto-extension@synology.com  # Synology Image Assistant Extension
+uBlock0@raymondhill.net  # uBlock Origin

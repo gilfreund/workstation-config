@@ -44,6 +44,7 @@ show_config() {
   echo "  macOS settings:   ${EXPORT_MACOS_SETTINGS:-true}"
   echo "  Dock apps:        ${EXPORT_MACOS_DOCK_APPS:-true}"
   echo "  Homebrew:         ${EXPORT_HOMEBREW:-true}"
+  echo "  Firefox:          ${EXPORT_FIREFOX:-true}"
   echo "  VS Code:          ${EXPORT_VSCODE:-true}"
   echo "  iTerm2:           ${EXPORT_ITERM2:-true}"
   echo "  Hidden Bar:       ${EXPORT_HIDDENBAR:-true}"
@@ -73,6 +74,7 @@ show_config() {
   echo "  Vault secrets:    ${REPO_DIR}/files/secrets/"
   echo "  macOS exports:    ${REPO_DIR}/exports/macos/"
   echo "  Brew exports:     ${REPO_DIR}/exports/brew/"
+  echo "  Firefox exports:  ${REPO_DIR}/exports/firefox/"
   echo "  Reports:          ${REPO_DIR}/exports/reports/"
   exit 0
 }
@@ -152,6 +154,20 @@ if [[ "${EXPORT_HOMEBREW:-true}" == "true" ]] && command -v brew &>/dev/null; th
 else
   log "Homebrew not installed — skipping."
   SKIPPED+=("homebrew")
+fi
+
+# --- Firefox ---
+if [[ "${EXPORT_FIREFOX:-true}" == "true" ]] && [[ -f "${HOME}/Library/Application Support/Firefox/profiles.ini" ]]; then
+  log "--- Collecting Firefox configuration ---"
+  if DRY_RUN="${DRY_RUN}" bash "${SCRIPT_DIR}/export_firefox.sh"; then
+    COLLECTED+=("firefox")
+  else
+    SKIPPED+=("firefox")
+  fi
+  echo ""
+else
+  log "Firefox not found or export disabled — skipping."
+  SKIPPED+=("firefox")
 fi
 
 # --- Summary ---
