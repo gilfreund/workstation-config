@@ -61,15 +61,21 @@
       ansible.builtin.command: dockutil --remove all --no-restart
       changed_when: true
 
-    - name: Add Dock apps in order
+    - name: Find app paths for Dock items
       ansible.builtin.shell: |
-        # Try full path first, fall back to name search
-        if [ -d '/Applications/{{ item }}.app' ]; then
-          dockutil --add '/Applications/{{ item }}.app' --no-restart
-        else
-          dockutil --add '{{ item }}' --no-restart
-        fi
+        mdfind "kMDItemKind == 'Application'" -name '{{ item }}' | head -1
       loop: "{{ dock_apps }}"
+      register: dock_app_paths
+      changed_when: false
+      failed_when: false
+
+    - name: Add Dock apps in order
+      ansible.builtin.command: >
+        dockutil --add '{{ item.stdout }}' --no-restart
+      loop: "{{ dock_app_paths.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+      when: item.stdout | length > 0
       register: dock_add
       changed_when: dock_add.rc == 0
       failed_when: false
