@@ -210,6 +210,26 @@ Mackup handles application preferences that are tedious to manage with Ansible (
 What Mackup is good for: app preferences with well-known config paths (VS Code, iTerm2, etc.)
 What to handle elsewhere: system-level settings (use mac-settings role), dotfiles you want templated (use dotfiles role).
 
+## Post-Migration Checklist
+
+After the bootstrap completes, these steps require manual action:
+
+1. **Sign into Apple ID** (System Settings → Apple ID) — enables iCloud Keychain sync for passwords, Wi-Fi credentials, and Safari data
+2. **Sign into apps** — account sessions cannot be migrated automatically:
+   - Microsoft Teams / Office / Outlook
+   - Firefox (Sync)
+   - Thunderbird (mail accounts)
+   - Signal (requires phone to re-link)
+   - Slack (per-workspace sign-in)
+   - Zoom
+3. **Install failed casks** — some casks require sudo and may fail without `-K`; install manually with `brew install --cask <name>`
+4. **Re-run Dock setup** if apps were not yet installed during the first run: `ansible-playbook -i inventory/localhost.yml site.yml --tags mac-settings`
+5. **Enable system extensions** when prompted:
+   - Karabiner-Elements (keyboard remapping)
+   - macFUSE (filesystem extensions)
+   - Tailscale / NetBird / OpenVPN (network extensions)
+6. **Restart** to apply all macOS settings (Dock, Finder, trackpad, keyboard)
+
 ## Caveats
 
 - Some macOS settings require a logout/restart to take effect
