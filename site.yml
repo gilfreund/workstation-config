@@ -5,6 +5,10 @@
   gather_facts: true
 
   pre_tasks:
+    - name: Group host by OS family
+      ansible.builtin.group_by:
+        key: "{{ ansible_facts['os_family'] | lower }}"
+
     - name: Display target system info
       ansible.builtin.debug:
         msg: "Configuring {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }} ({{ ansible_facts['architecture'] }})"
