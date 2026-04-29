@@ -53,8 +53,7 @@
   community.general.homebrew_cask:
     name: "{{ item }}"
     state: present
-  environment:
-    SUDO_ASKPASS: /tmp/.ansible_askpass
+  environment: "{{ {'SUDO_ASKPASS': '/tmp/.ansible_askpass'} if ansible_become_password is defined else {} }}"
   loop: "{{ brewfile_casks }}"
   loop_control:
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
