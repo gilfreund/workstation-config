@@ -63,7 +63,10 @@
 
     - name: Find app paths for Dock items
       ansible.builtin.shell: |
-        mdfind "kMDItemKind == 'Application'" -name '{{ item }}' | head -1
+        for dir in /Applications /System/Applications /System/Volumes/Preboot/Cryptexes/App/System/Applications; do
+          found=$(find "$dir" -maxdepth 3 -name '{{ item }}.app' -type d 2>/dev/null | head -1)
+          [ -n "$found" ] && echo "$found" && exit 0
+        done
       loop: "{{ dock_apps }}"
       register: dock_app_paths
       changed_when: false
