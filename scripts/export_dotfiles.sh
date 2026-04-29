@@ -253,7 +253,7 @@ if [[ "${EXPORT_SSH_VAULT:-true}" == "true" ]]; then
 SSH_SRC="${HOME_DIR}/.ssh"
 SSH_VAULT="${SECRETS_DIR}/dot_ssh.vault"
 if [[ -d "${SSH_SRC}" ]] && [[ -n "$(ls -A "${SSH_SRC}" 2>/dev/null)" ]]; then
-  run tar cf "${SSH_VAULT}" -C "${HOME_DIR}" .ssh
+  run tar cf "${SSH_VAULT}" -C "${HOME_DIR}" --exclude='.ssh/known_hosts' --exclude='.ssh/known_hosts.old' .ssh
   encrypt_vault "${SSH_VAULT}" ".ssh/ → ${SSH_VAULT}"
 else
   warn "  ✗ .ssh/ not found or empty, skipping."
