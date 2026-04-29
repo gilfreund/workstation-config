@@ -62,15 +62,20 @@
       changed_when: true
 
     - name: Add Dock apps in order
-      ansible.builtin.command: >
-        dockutil --add '{{ item }}' --no-restart
+      ansible.builtin.shell: |
+        # Try full path first, fall back to name search
+        if [ -d '/Applications/{{ item }}.app' ]; then
+          dockutil --add '/Applications/{{ item }}.app' --no-restart
+        else
+          dockutil --add '{{ item }}' --no-restart
+        fi
       loop: "{{ dock_apps }}"
       register: dock_add
       changed_when: dock_add.rc == 0
       failed_when: false
 
     - name: Restart Dock after layout change
-      ansible.builtin.command: killall Dock
+      ansible.builtin.shell: sleep 1 && killall Dock
       changed_when: true
 
 # --- Finder ---
