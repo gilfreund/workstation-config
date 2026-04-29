@@ -10,10 +10,27 @@ LOG_PREFIX="[export-dotfiles]"
 log() { echo "${LOG_PREFIX} $*"; }
 warn() { echo "${LOG_PREFIX} WARN: $*" >&2; }
 
+usage() {
+  cat <<EOF
+Usage: ./scripts/export_dotfiles.sh [OPTIONS]
+
+Export dotfiles, app configs, and vault-encrypted secrets from the current machine.
+
+Options:
+  -n, --dry-run   Show what would be exported without writing files
+  -h, --help      Show this help message
+
+Configuration: edit export.conf to toggle components.
+Allowlists: edit FILES and DIRS arrays in this script.
+EOF
+  exit 0
+}
+
 DRY_RUN="${DRY_RUN:-false}"
 for arg in "$@"; do
   case "${arg}" in
     --dry-run|-n) DRY_RUN=true ;;
+    --help|-h) usage ;;
   esac
 done
 

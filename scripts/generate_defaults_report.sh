@@ -9,7 +9,26 @@ REPORT="${REPORT_DIR}/defaults_report.md"
 LOG_PREFIX="[defaults-report]"
 log() { echo "${LOG_PREFIX} $*"; }
 
+usage() {
+  cat <<EOF
+Usage: ./scripts/generate_defaults_report.sh [OPTIONS]
+
+Generate a markdown report of current macOS defaults values.
+
+Options:
+  -n, --dry-run   Show what would be generated without writing files
+  -h, --help      Show this help message
+EOF
+  exit 0
+}
+
 DRY_RUN="${DRY_RUN:-false}"
+for arg in "$@"; do
+  case "${arg}" in
+    --dry-run|-n) DRY_RUN=true ;;
+    --help|-h) usage ;;
+  esac
+done
 
 if [[ "$(uname -s)" != "Darwin" ]]; then
   log "Not macOS — skipping defaults report."

@@ -10,7 +10,27 @@ LOG_PREFIX="[export-brew]"
 log() { echo "${LOG_PREFIX} $*"; }
 err() { echo "${LOG_PREFIX} ERROR: $*" >&2; }
 
+usage() {
+  cat <<EOF
+Usage: ./scripts/export_brew.sh [OPTIONS]
+
+Export Homebrew state (Brewfile, formulae, casks, taps).
+
+Options:
+  -n, --dry-run   Show what would be exported without writing files
+  -h, --help      Show this help message
+EOF
+  exit 0
+}
+
 DRY_RUN="${DRY_RUN:-false}"
+for arg in "$@"; do
+  case "${arg}" in
+    --dry-run|-n) DRY_RUN=true ;;
+    --help|-h) usage ;;
+  esac
+done
+
 run() {
   if [[ "${DRY_RUN}" == "true" ]]; then
     log "  [dry-run] would run: $*"

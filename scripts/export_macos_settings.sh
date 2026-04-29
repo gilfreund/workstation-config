@@ -9,7 +9,26 @@ LOG_PREFIX="[export-macos]"
 log() { echo "${LOG_PREFIX} $*"; }
 err() { echo "${LOG_PREFIX} ERROR: $*" >&2; }
 
+usage() {
+  cat <<EOF
+Usage: ./scripts/export_macos_settings.sh [OPTIONS]
+
+Export macOS preference domains, key summary, and Dock app layout.
+
+Options:
+  -n, --dry-run   Show what would be exported without writing files
+  -h, --help      Show this help message
+EOF
+  exit 0
+}
+
 DRY_RUN="${DRY_RUN:-false}"
+for arg in "$@"; do
+  case "${arg}" in
+    --dry-run|-n) DRY_RUN=true ;;
+    --help|-h) usage ;;
+  esac
+done
 
 if [[ "$(uname -s)" != "Darwin" ]]; then
   err "This script only runs on macOS."

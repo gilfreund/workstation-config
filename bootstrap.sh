@@ -8,6 +8,20 @@ log()  { echo "${LOG_PREFIX} $*"; }
 err()  { echo "${LOG_PREFIX} ERROR: $*" >&2; }
 die()  { err "$@"; exit 1; }
 
+usage() {
+  cat <<EOF
+Usage: ./bootstrap.sh [OPTIONS]
+
+Install prerequisites and run the Ansible playbook on a fresh machine.
+
+Options:
+  -n, --dry-run   Install prerequisites but run playbook in check mode
+  -h, --help      Show this help message
+  Additional flags are passed through to ansible-playbook.
+EOF
+  exit 0
+}
+
 detect_platform() {
   case "$(uname -s)" in
     Darwin) echo "macos" ;;
@@ -103,6 +117,7 @@ EXTRA_ARGS=()
 for arg in "$@"; do
   case "${arg}" in
     --dry-run|-n) DRY_RUN=true ;;
+    --help|-h) usage ;;
     *) EXTRA_ARGS+=("${arg}") ;;
   esac
 done

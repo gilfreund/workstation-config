@@ -7,11 +7,28 @@ REPO_DIR="$(dirname "${SCRIPT_DIR}")"
 LOG_PREFIX="[collect]"
 log() { echo "${LOG_PREFIX} $*"; }
 
+usage() {
+  cat <<EOF
+Usage: ./scripts/collect_current_state.sh [OPTIONS]
+
+Collect configuration from the current machine (dotfiles, macOS settings,
+Homebrew, app configs, vault-encrypted secrets).
+
+Options:
+  -n, --dry-run   Show what would be collected without writing files
+  -h, --help      Show this help message
+
+Configuration: edit export.conf to toggle components.
+EOF
+  exit 0
+}
+
 # Parse flags
 DRY_RUN="${DRY_RUN:-false}"
 for arg in "$@"; do
   case "${arg}" in
     --dry-run|-n) DRY_RUN=true ;;
+    --help|-h) usage ;;
   esac
 done
 
