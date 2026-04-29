@@ -101,6 +101,7 @@
     {{ playbook_dir }}/files/app-configs/m365/{{ item.domain }}.plist
   loop:
     - { domain: "com.microsoft.office" }
+    - { domain: "com.microsoft.teams" }
     - { domain: "com.microsoft.teams2" }
     - { domain: "com.microsoft.Outlook" }
   loop_control:

@@ -203,6 +203,7 @@ M365_DIR="${APP_DIR}/m365"
 run mkdir -p "${M365_DIR}"
 M365_DOMAINS=(
   "com.microsoft.office"
+  "com.microsoft.teams"
   "com.microsoft.teams2"
   "com.microsoft.Outlook"
 )
