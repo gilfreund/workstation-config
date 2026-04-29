@@ -16,6 +16,7 @@ Install prerequisites and run the Ansible playbook on a fresh machine.
 
 Options:
   -n, --dry-run       Install prerequisites but run playbook in check mode
+  --force-galaxy      Reinstall Ansible Galaxy collections even if present
   -c, --show-config   Display active configuration and exit
   -h, --help          Show this help message
   Additional flags are passed through to ansible-playbook.
@@ -160,6 +161,11 @@ bootstrap_debian() {
 }
 
 install_ansible_requirements() {
+  local collections_dir="${REPO_DIR}/.ansible/collections"
+  if [ "${FORCE_GALAXY}" != "true" ] && [ -d "${collections_dir}/ansible_collections/community/general" ]; then
+    log "Ansible Galaxy collections already installed, skipping (use --force-galaxy to reinstall)"
+    return
+  fi
   log "Installing Ansible Galaxy requirements..."
   ansible-galaxy collection install -r "${REPO_DIR}/requirements.yml" --force
 }
@@ -179,10 +185,12 @@ run_playbook() {
 
 # --- Main ---
 DRY_RUN=false
+FORCE_GALAXY=false
 EXTRA_ARGS=()
 for arg in "$@"; do
   case "${arg}" in
     --dry-run|-n) DRY_RUN=true ;;
+    --force-galaxy) FORCE_GALAXY=true ;;
     --show-config|-c) show_config ;;
     --help|-h) usage ;;
     *) EXTRA_ARGS+=("${arg}") ;;
