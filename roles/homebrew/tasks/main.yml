@@ -12,6 +12,6 @@
 
 - name: Install packages from Brewfile
   ansible.builtin.command:
-    cmd: brew bundle install --file={{ homebrew_brewfile }} --no-lock
+    cmd: brew bundle install --file={{ homebrew_brewfile }}
   register: brew_bundle
   changed_when: "'Installing' in brew_bundle.stdout"
