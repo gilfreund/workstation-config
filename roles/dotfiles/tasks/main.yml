@@ -58,39 +58,58 @@
     backup: true
   when: kiro_ssh_servers | default([]) | length > 0
 
+- name: Check which dotfile directories exist in repo
+  ansible.builtin.stat:
+    path: "{{ playbook_dir }}/files/dotfiles/{{ item }}"
+  loop: "{{ dotfiles_dirs }}"
+  register: dotfile_dir_checks
+
 - name: Ensure dotfile parent directories exist
   ansible.builtin.file:
-    path: "{{ user_home }}/{{ item }}"
+    path: "{{ user_home }}/{{ item.item }}"
     state: directory
     owner: "{{ user_name }}"
     mode: "0755"
-  loop: "{{ dotfiles_dirs }}"
+  loop: "{{ dotfile_dir_checks.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists
 
 - name: Copy dotfile directories
   ansible.builtin.copy:
-    src: "dotfiles/{{ item }}/"
-    dest: "{{ user_home }}/{{ item }}/"
+    src: "dotfiles/{{ item.item }}/"
+    dest: "{{ user_home }}/{{ item.item }}/"
     owner: "{{ user_name }}"
     mode: preserve
     backup: true
-  loop: "{{ dotfiles_dirs }}"
-  when: lookup('fileglob', playbook_dir + '/files/dotfiles/' + item + '/*') | length > 0
+  loop: "{{ dotfile_dir_checks.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.stat.exists
 
 - name: Expand __USER_HOME__ placeholder in copied dotfiles
   ansible.builtin.shell: |
-    find {{ user_home }}/{{ item }} -type f \( -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.plist' -o -name '*.cfg' -o -name '*.conf' \) -exec \
+    find {{ user_home }}/{{ item.item }} -type f \( -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.plist' -o -name '*.cfg' -o -name '*.conf' \) -exec \
       sed -i '' 's|__USER_HOME__|{{ user_home }}|g' {} +
-  loop: "{{ dotfiles_dirs }}"
+  loop: "{{ dotfile_dir_checks.results }}"
+  loop_control:
+    label: "{{ item.item }}"
   changed_when: true
-  when: ansible_facts['os_family'] == "Darwin"
+  when:
+    - ansible_facts['os_family'] == "Darwin"
+    - item.stat.exists
 
 - name: Expand __USER_HOME__ placeholder in copied dotfiles (Linux)
   ansible.builtin.shell: |
-    find {{ user_home }}/{{ item }} -type f \( -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.plist' -o -name '*.cfg' -o -name '*.conf' \) -exec \
+    find {{ user_home }}/{{ item.item }} -type f \( -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.plist' -o -name '*.cfg' -o -name '*.conf' \) -exec \
       sed -i 's|__USER_HOME__|{{ user_home }}|g' {} +
-  loop: "{{ dotfiles_dirs }}"
+  loop: "{{ dotfile_dir_checks.results }}"
+  loop_control:
+    label: "{{ item.item }}"
   changed_when: true
-  when: ansible_facts['os_family'] != "Darwin"
+  when:
+    - ansible_facts['os_family'] != "Darwin"
+    - item.stat.exists
 
 # --- .ssh directory (vault-encrypted) ---
 - name: Check if dot_ssh vault exists
