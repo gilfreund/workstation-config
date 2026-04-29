@@ -86,7 +86,10 @@ install_homebrew() {
   fi
   log "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  # Add brew to PATH for this session
+}
+
+ensure_brew_in_path() {
+  if command -v brew &>/dev/null; then return; fi
   if [ -f /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
   elif [ -f /usr/local/bin/brew ]; then
@@ -127,6 +130,7 @@ bootstrap_macos() {
   fi
 
   install_homebrew
+  ensure_brew_in_path
 
   # Python 3 (macOS ships with it since Catalina, but ensure it)
   if ! command -v python3 &>/dev/null; then
