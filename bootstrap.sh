@@ -167,7 +167,7 @@ install_ansible_requirements() {
     return
   fi
   log "Installing Ansible Galaxy requirements..."
-  ansible-galaxy collection install -r "${REPO_DIR}/requirements.yml" --force
+  ansible-galaxy collection install -r "${REPO_DIR}/requirements.yml" -p "${collections_dir}" --force
 }
 
 run_playbook() {
