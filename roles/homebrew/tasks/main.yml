@@ -10,8 +10,40 @@
     update_homebrew: true
   when: brew_check.rc == 0
 
-- name: Install packages from Brewfile
-  ansible.builtin.command:
-    cmd: brew bundle install --file={{ homebrew_brewfile }}
-  register: brew_bundle
-  changed_when: "'Installing' in brew_bundle.stdout"
+- name: Parse taps from Brewfile
+  ansible.builtin.set_fact:
+    brewfile_taps: "{{ lookup('file', homebrew_brewfile).splitlines() | select('match', '^tap ') | map('regex_replace', '^tap \"(.+?)\".*', '\\1') | list }}"
+
+- name: Parse formulae from Brewfile
+  ansible.builtin.set_fact:
+    brewfile_formulae: "{{ lookup('file', homebrew_brewfile).splitlines() | select('match', '^brew ') | map('regex_replace', '^brew \"(.+?)\".*', '\\1') | list }}"
+
+- name: Parse casks from Brewfile
+  ansible.builtin.set_fact:
+    brewfile_casks: "{{ lookup('file', homebrew_brewfile).splitlines() | select('match', '^cask ') | map('regex_replace', '^cask \"(.+?)\".*', '\\1') | list }}"
+
+- name: "Add taps ({{ brewfile_taps | length }} total)"
+  community.general.homebrew_tap:
+    name: "{{ item }}"
+  loop: "{{ brewfile_taps }}"
+  loop_control:
+    label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
+    extended: true
+
+- name: "Install formulae ({{ brewfile_formulae | length }} total)"
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ brewfile_formulae }}"
+  loop_control:
+    label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
+    extended: true
+
+- name: "Install casks ({{ brewfile_casks | length }} total)"
+  community.general.homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ brewfile_casks }}"
+  loop_control:
+    label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
+    extended: true
