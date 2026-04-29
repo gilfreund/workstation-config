@@ -119,15 +119,15 @@
   community.general.osx_defaults:
     domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
     key: Clicking
-    type: bool
-    value: "{{ trackpad_tap_to_click }}"
+    type: int
+    value: "{{ trackpad_tap_to_click | bool | int }}"
 
 - name: "Trackpad: tap to click (multitouch)"
   community.general.osx_defaults:
     domain: com.apple.AppleMultitouchTrackpad
     key: Clicking
-    type: bool
-    value: "{{ trackpad_tap_to_click }}"
+    type: int
+    value: "{{ trackpad_tap_to_click | bool | int }}"
 
 - name: "Trackpad: natural scrolling"
   community.general.osx_defaults:
