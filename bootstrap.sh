@@ -178,10 +178,7 @@ run_playbook() {
   log "Running Ansible playbook..."
   cd "${REPO_DIR}"
 
-  local ask_become=""
-  if [ "${PLATFORM}" = "debian" ]; then
-    ask_become="-K"
-  fi
+  local ask_become="-K"
 
   # shellcheck disable=SC2086
   ansible-playbook -i inventory/localhost.yml site.yml ${ask_become} "$@"
