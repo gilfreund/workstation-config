@@ -7,6 +7,13 @@ REPO_DIR="$(dirname "${SCRIPT_DIR}")"
 LOG_PREFIX="[collect]"
 log() { echo "${LOG_PREFIX} $*"; }
 
+# Load export toggles
+CONF="${REPO_DIR}/export.conf"
+if [[ -f "${CONF}" ]]; then
+  # shellcheck source=../export.conf
+  source "${CONF}"
+fi
+
 usage() {
   cat <<EOF
 Usage: ./scripts/collect_current_state.sh [OPTIONS]
@@ -15,11 +22,58 @@ Collect configuration from the current machine (dotfiles, macOS settings,
 Homebrew, app configs, vault-encrypted secrets).
 
 Options:
-  -n, --dry-run   Show what would be collected without writing files
-  -h, --help      Show this help message
+  -n, --dry-run       Show what would be collected without writing files
+  -c, --show-config   Display active configuration and exit
+  -h, --help          Show this help message
 
 Configuration: edit export.conf to toggle components.
 EOF
+  exit 0
+}
+
+show_config() {
+  echo "=== Collection Configuration ==="
+  echo ""
+  echo "Platform:       $(uname -s)"
+  echo "Home:           ${HOME}"
+  echo "Repo:           ${REPO_DIR}"
+  echo "Config file:    ${CONF}"
+  echo ""
+  echo "--- Export Toggles (export.conf) ---"
+  echo "  Dotfiles:         ${EXPORT_DOTFILES:-true}"
+  echo "  macOS settings:   ${EXPORT_MACOS_SETTINGS:-true}"
+  echo "  Dock apps:        ${EXPORT_MACOS_DOCK_APPS:-true}"
+  echo "  Homebrew:         ${EXPORT_HOMEBREW:-true}"
+  echo "  VS Code:          ${EXPORT_VSCODE:-true}"
+  echo "  iTerm2:           ${EXPORT_ITERM2:-true}"
+  echo "  Hidden Bar:       ${EXPORT_HIDDENBAR:-true}"
+  echo "  Cyberduck:        ${EXPORT_CYBERDUCK:-true}"
+  echo ""
+  echo "--- Vault Exports ---"
+  echo "  SSH:              ${EXPORT_SSH_VAULT:-true}"
+  echo "  AWS:              ${EXPORT_AWS_VAULT:-true}"
+  echo "  Secrets:          ${EXPORT_SECRETS_VAULT:-true}"
+  echo "  Rclone:           ${EXPORT_RCLONE_VAULT:-true}"
+  echo ""
+  echo "--- Vault Password ---"
+  local vp="${HOME}/.secrets/ansible-workstation-config"
+  if [[ -f "${vp}" ]]; then
+    echo "  File:             ${vp} (exists)"
+  else
+    echo "  File:             ${vp} (MISSING — vault encryption will prompt)"
+  fi
+  echo ""
+  echo "--- Dotfile Allowlists ---"
+  echo "  Files:            .zshrc .bashrc .gitconfig .gitignore_global .tmux.conf .vimrc"
+  echo "  Directories:      .config/nvim .config/ghostty .config/gh .config/iterm2 .config/karabiner .aws .kiro"
+  echo ""
+  echo "--- Output Paths ---"
+  echo "  Dotfiles:         ${REPO_DIR}/files/dotfiles/"
+  echo "  App configs:      ${REPO_DIR}/files/app-configs/"
+  echo "  Vault secrets:    ${REPO_DIR}/files/secrets/"
+  echo "  macOS exports:    ${REPO_DIR}/exports/macos/"
+  echo "  Brew exports:     ${REPO_DIR}/exports/brew/"
+  echo "  Reports:          ${REPO_DIR}/exports/reports/"
   exit 0
 }
 
@@ -28,16 +82,10 @@ DRY_RUN="${DRY_RUN:-false}"
 for arg in "$@"; do
   case "${arg}" in
     --dry-run|-n) DRY_RUN=true ;;
+    --show-config|-c) show_config ;;
     --help|-h) usage ;;
   esac
 done
-
-# Load export toggles
-CONF="${REPO_DIR}/export.conf"
-if [[ -f "${CONF}" ]]; then
-  # shellcheck source=../export.conf
-  source "${CONF}"
-fi
 
 PLATFORM="$(uname -s)"
 COLLECTED=()

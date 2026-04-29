@@ -15,10 +15,54 @@ Usage: ./bootstrap.sh [OPTIONS]
 Install prerequisites and run the Ansible playbook on a fresh machine.
 
 Options:
-  -n, --dry-run   Install prerequisites but run playbook in check mode
-  -h, --help      Show this help message
+  -n, --dry-run       Install prerequisites but run playbook in check mode
+  -c, --show-config   Display active configuration and exit
+  -h, --help          Show this help message
   Additional flags are passed through to ansible-playbook.
 EOF
+  exit 0
+}
+
+show_config() {
+  echo "=== Restore Configuration ==="
+  echo ""
+  echo "Platform:       $(uname -s)"
+  echo "Home:           ${HOME}"
+  echo "Repo:           ${REPO_DIR}"
+  echo ""
+  echo "--- Prerequisites ---"
+  echo "  Homebrew:         $(command -v brew &>/dev/null && echo 'installed' || echo 'will install')"
+  echo "  Python3:          $(command -v python3 &>/dev/null && echo 'installed' || echo 'will install')"
+  echo "  Ansible:          $(command -v ansible &>/dev/null && ansible --version | head -1 || echo 'will install')"
+  echo ""
+  echo "--- Ansible Config ---"
+  echo "  Playbook:         ${REPO_DIR}/site.yml"
+  echo "  Inventory:        ${REPO_DIR}/inventory/localhost.yml"
+  echo "  Vault password:   $(grep vault_password_file "${REPO_DIR}/ansible.cfg" 2>/dev/null | awk -F= '{print $2}' | xargs)"
+  echo ""
+  echo "--- Roles ---"
+  echo "  dotfiles          Copy/template dotfiles + deploy vault secrets"
+  echo "  homebrew          Install packages from Brewfile"
+  echo "  mac-settings      macOS defaults + Dock layout (macOS only)"
+  echo "  app-settings      VS Code, iTerm2, Hidden Bar, Cyberduck"
+  echo "  debian-common     apt packages + shell config (Debian only)"
+  echo ""
+  echo "--- Vault Files ---"
+  local found_vault=false
+  for f in "${REPO_DIR}"/files/secrets/*.vault; do
+    if [[ -f "${f}" ]]; then
+      echo "  $(basename "${f}")"
+      found_vault=true
+    fi
+  done
+  if [[ "${found_vault}" == "false" ]]; then
+    echo "  (none — run collection first)"
+  fi
+  echo ""
+  echo "--- Group Vars ---"
+  for f in "${REPO_DIR}"/group_vars/*.yml; do
+    echo "  $(basename "${f}")"
+  done
   exit 0
 }
 
@@ -117,6 +161,7 @@ EXTRA_ARGS=()
 for arg in "$@"; do
   case "${arg}" in
     --dry-run|-n) DRY_RUN=true ;;
+    --show-config|-c) show_config ;;
     --help|-h) usage ;;
     *) EXTRA_ARGS+=("${arg}") ;;
   esac
