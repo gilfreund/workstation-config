@@ -48,6 +48,7 @@ app_configs:
   iterm2: true
   hiddenbar: true
   cyberduck: true
+  m365: true
 
 # Mackup
 mackup_enabled: false

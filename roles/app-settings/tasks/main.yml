@@ -94,6 +94,23 @@
     - lookup('fileglob', playbook_dir + '/files/app-configs/cyberduck/ch.sudo.cyberduck.plist') | length > 0
   changed_when: true
 
+# --- Microsoft 365 ---
+- name: Restore M365 preferences
+  ansible.builtin.command: >
+    defaults import {{ item.domain }}
+    {{ playbook_dir }}/files/app-configs/m365/{{ item.domain }}.plist
+  loop:
+    - { domain: "com.microsoft.office" }
+    - { domain: "com.microsoft.teams2" }
+    - { domain: "com.microsoft.Outlook" }
+  loop_control:
+    label: "{{ item.domain }}"
+  when:
+    - app_configs.m365 | default(true)
+    - ansible_facts['os_family'] == "Darwin"
+    - lookup('fileglob', playbook_dir + '/files/app-configs/m365/' + item.domain + '.plist') | length > 0
+  changed_when: true
+
 # --- Mackup (optional) ---
 - name: Check if mackup is installed
   ansible.builtin.command: which mackup
@@ -120,3 +137,45 @@
   when:
     - mackup_enabled
     - mackup_installed.rc == 0
+
+# --- Thunderbird ---
+- name: Restore Thunderbird profile from vault
+  when:
+    - app_configs.thunderbird | default(true)
+    - ansible_facts['os_family'] == "Darwin"
+    - lookup('fileglob', playbook_dir + '/files/secrets/thunderbird_profile.vault') | length > 0
+  block:
+    - name: Ensure Thunderbird directory exists
+      ansible.builtin.file:
+        path: "{{ user_home }}/Library/Thunderbird"
+        state: directory
+        owner: "{{ user_name }}"
+        mode: "0755"
+
+    - name: Check if Thunderbird profile already restored
+      ansible.builtin.find:
+        paths: "{{ user_home }}/Library/Thunderbird/Profiles"
+        file_type: directory
+      register: tb_profiles
+
+    - name: Decrypt and extract Thunderbird profile
+      when: tb_profiles.matched == 0
+      block:
+        - name: Decrypt Thunderbird vault archive
+          ansible.builtin.copy:
+            src: "secrets/thunderbird_profile.vault"
+            dest: "/tmp/thunderbird_profile.tar.gz"
+            owner: "{{ user_name }}"
+            mode: "0600"
+
+        - name: Extract Thunderbird profile
+          ansible.builtin.unarchive:
+            src: "/tmp/thunderbird_profile.tar.gz"
+            dest: "{{ user_home }}/Library/Thunderbird"
+            remote_src: true
+            owner: "{{ user_name }}"
+
+        - name: Remove temporary archive
+          ansible.builtin.file:
+            path: /tmp/thunderbird_profile.tar.gz
+            state: absent

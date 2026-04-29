@@ -45,10 +45,12 @@ show_config() {
   echo "  Dock apps:        ${EXPORT_MACOS_DOCK_APPS:-true}"
   echo "  Homebrew:         ${EXPORT_HOMEBREW:-true}"
   echo "  Firefox:          ${EXPORT_FIREFOX:-true}"
+  echo "  Thunderbird:      ${EXPORT_THUNDERBIRD:-true}"
   echo "  VS Code:          ${EXPORT_VSCODE:-true}"
   echo "  iTerm2:           ${EXPORT_ITERM2:-true}"
   echo "  Hidden Bar:       ${EXPORT_HIDDENBAR:-true}"
   echo "  Cyberduck:        ${EXPORT_CYBERDUCK:-true}"
+  echo "  M365:             ${EXPORT_M365:-true}"
   echo ""
   echo "--- Vault Exports ---"
   echo "  SSH:              ${EXPORT_SSH_VAULT:-true}"
@@ -75,6 +77,7 @@ show_config() {
   echo "  macOS exports:    ${REPO_DIR}/exports/macos/"
   echo "  Brew exports:     ${REPO_DIR}/exports/brew/"
   echo "  Firefox exports:  ${REPO_DIR}/exports/firefox/"
+  echo "  Thunderbird:      ${REPO_DIR}/exports/thunderbird/"
   echo "  Reports:          ${REPO_DIR}/exports/reports/"
   exit 0
 }
@@ -168,6 +171,20 @@ if [[ "${EXPORT_FIREFOX:-true}" == "true" ]] && [[ -f "${HOME}/Library/Applicati
 else
   log "Firefox not found or export disabled — skipping."
   SKIPPED+=("firefox")
+fi
+
+# --- Thunderbird ---
+if [[ "${EXPORT_THUNDERBIRD:-true}" == "true" ]] && [[ -d "${HOME}/Library/Thunderbird" ]]; then
+  log "--- Collecting Thunderbird profile ---"
+  if DRY_RUN="${DRY_RUN}" bash "${SCRIPT_DIR}/export_thunderbird.sh"; then
+    COLLECTED+=("thunderbird")
+  else
+    SKIPPED+=("thunderbird")
+  fi
+  echo ""
+else
+  log "Thunderbird not found or export disabled — skipping."
+  SKIPPED+=("thunderbird")
 fi
 
 # --- Summary ---

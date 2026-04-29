@@ -197,6 +197,26 @@ else
 fi
 fi
 
+# Microsoft 365 (Office identity + Teams)
+if [[ "${EXPORT_M365:-true}" == "true" ]]; then
+M365_DIR="${APP_DIR}/m365"
+run mkdir -p "${M365_DIR}"
+M365_DOMAINS=(
+  "com.microsoft.office"
+  "com.microsoft.teams2"
+  "com.microsoft.Outlook"
+)
+for domain in "${M365_DOMAINS[@]}"; do
+  plist="${HOME_DIR}/Library/Preferences/${domain}.plist"
+  if [[ -f "${plist}" ]]; then
+    run plutil -convert xml1 -o "${M365_DIR}/${domain}.plist" "${plist}"
+    log "  ✓ ${domain}"
+  else
+    warn "  ✗ ${domain} not found, skipping."
+  fi
+done
+fi
+
 # --- Secrets (vault-encrypted) ---
 SECRETS_DIR="${REPO_DIR}/files/secrets"
 run mkdir -p "${SECRETS_DIR}"
