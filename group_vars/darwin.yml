@@ -13,7 +13,7 @@ mac_settings_domains:
   - NSGlobalDomain
 
 # Dock
-dock_autohide: true
+dock_autohide: false
 dock_tilesize: 48
 dock_orientation: bottom       # left, bottom, right
 dock_minimize_effect: scale    # genie, scale

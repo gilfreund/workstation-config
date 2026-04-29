@@ -39,33 +39,64 @@
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
     extended: true
 
-- name: Create sudo askpass helper for cask installs
-  ansible.builtin.copy:
-    dest: /tmp/.brew_askpass
-    mode: "0700"
-    content: |
-      #!/bin/bash
-      echo '{{ ansible_become_password }}'
-  when: ansible_become_password is defined
-  no_log: true
-
-- name: "Install casks ({{ brewfile_casks | length }} total)"
-  ansible.builtin.shell: brew install --cask '{{ item }}'
-  environment: "{{ {'SUDO_ASKPASS': '/tmp/.brew_askpass'} if ansible_become_password is defined else {} }}"
+# --- Dynamic cask classification ---
+# Query each cask's JSON to detect pkg artifacts (which require sudo)
+- name: Query cask metadata for pkg detection
+  ansible.builtin.shell: >
+    brew info --json=v2 --cask '{{ item }}' 2>/dev/null | grep -q '"pkg"' && echo "pkg" || echo "nopkg"
   loop: "{{ brewfile_casks }}"
+  loop_control:
+    label: "{{ item }}"
+  register: cask_pkg_check
+  changed_when: false
+  failed_when: false
+
+- name: Classify casks into sudo and non-sudo groups
+  ansible.builtin.set_fact:
+    casks_sudo: "{{ cask_pkg_check.results | selectattr('stdout', 'eq', 'pkg') | map(attribute='item') | list }}"
+    casks_nosudo: "{{ cask_pkg_check.results | selectattr('stdout', 'eq', 'nopkg') | map(attribute='item') | list }}"
+
+- name: Show cask classification
+  ansible.builtin.debug:
+    msg:
+      - "Casks requiring sudo (pkg): {{ casks_sudo }}"
+      - "Casks without sudo: {{ casks_nosudo }}"
+
+# --- Install non-sudo casks ---
+- name: "Install casks - no sudo ({{ casks_nosudo | length }} total)"
+  community.general.homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ casks_nosudo }}"
   loop_control:
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
     extended: true
-  register: cask_results
-  changed_when: "cask_results.rc == 0 and 'already installed' not in (cask_results.stderr | default(''))"
+  register: cask_nosudo_results
   failed_when: false
 
-- name: Remove sudo askpass helper
-  ansible.builtin.file:
-    path: /tmp/.brew_askpass
-    state: absent
+# --- Install sudo casks ---
+- name: "Install casks - sudo required ({{ casks_sudo | length }} total)"
+  community.general.homebrew_cask:
+    name: "{{ item }}"
+    state: present
+    sudo_password: "{{ ansible_become_password | default(omit) }}"
+  loop: "{{ casks_sudo }}"
+  loop_control:
+    label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
+    extended: true
+  register: cask_sudo_results
+  failed_when: false
+
+# --- Report any failures ---
+- name: Collect all failed casks
+  ansible.builtin.set_fact:
+    failed_casks: >-
+      {{
+        (cask_nosudo_results.results | default([]) | selectattr('failed', 'true') | map(attribute='item') | list) +
+        (cask_sudo_results.results | default([]) | selectattr('failed', 'true') | map(attribute='item') | list)
+      }}
 
 - name: Report failed cask installs
   ansible.builtin.debug:
-    msg: "Failed casks (install manually): {{ cask_results.results | selectattr('rc', 'ne', 0) | map(attribute='item') | list }}"
-  when: cask_results.results | selectattr('rc', 'ne', 0) | list | length > 0
+    msg: "Failed casks (install manually): {{ failed_casks }}"
+  when: failed_casks | length > 0
