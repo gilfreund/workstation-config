@@ -39,11 +39,22 @@
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
     extended: true
 
+- name: Create sudo askpass helper
+  ansible.builtin.copy:
+    dest: /tmp/.ansible_askpass
+    mode: "0700"
+    content: |
+      #!/bin/bash
+      echo '{{ ansible_become_password }}'
+  when: ansible_become_password is defined
+  no_log: true
+
 - name: "Install casks ({{ brewfile_casks | length }} total)"
   community.general.homebrew_cask:
     name: "{{ item }}"
     state: present
-    sudo_password: "{{ ansible_become_password | default(omit) }}"
+  environment:
+    SUDO_ASKPASS: /tmp/.ansible_askpass
   loop: "{{ brewfile_casks }}"
   loop_control:
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
@@ -51,7 +62,13 @@
   register: cask_results
   ignore_errors: true
 
+- name: Remove sudo askpass helper
+  ansible.builtin.file:
+    path: /tmp/.ansible_askpass
+    state: absent
+  when: ansible_become_password is defined
+
 - name: Report failed cask installs
   ansible.builtin.debug:
-    msg: "Failed casks (may need sudo — rerun with -K): {{ cask_results.results | selectattr('failed', 'true') | map(attribute='item') | list }}"
+    msg: "Failed casks (install manually with: brew install --cask <name>): {{ cask_results.results | selectattr('failed', 'true') | map(attribute='item') | list }}"
   when: cask_results.results | selectattr('failed', 'true') | list | length > 0
