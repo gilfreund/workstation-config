@@ -19,7 +19,9 @@ Collection (source machine)          Restore (fresh machine)
 scripts/collect_current_state.sh     bootstrap.sh
   ├── export_macos_settings.sh         ├── install prerequisites
   ├── export_brew.sh                   ├── install Ansible
-  └── export_dotfiles.sh               └── ansible-playbook site.yml
+  ├── export_dotfiles.sh               └── ansible-playbook site.yml
+  ├── export_firefox.sh
+  └── export_thunderbird.sh
                                             ├── dotfiles role
                                             ├── homebrew role
                                             ├── mac-settings role
@@ -43,6 +45,8 @@ This exports:
 - Homebrew packages → `Brewfile` + `exports/brew/`
 - Selected dotfiles → `files/dotfiles/`
 - Vault-encrypted secrets → `files/secrets/`
+- Firefox prefs & extensions → `exports/firefox/`
+- Thunderbird accounts & filters → `exports/thunderbird/`
 - Human-readable report → `exports/reports/`
 
 ### Restore on a fresh machine
@@ -158,6 +162,8 @@ workstation-config/
 │   ├── export_dotfiles.sh      # Dotfiles + vault exports
 │   ├── export_macos_settings.sh
 │   ├── export_brew.sh
+│   ├── export_firefox.sh
+│   ├── export_thunderbird.sh
 │   └── generate_defaults_report.sh
 ├── files/
 │   ├── dotfiles/               # Plain-text dotfile sources
@@ -166,6 +172,8 @@ workstation-config/
 └── exports/                    # Machine-specific exports (gitignored)
     ├── macos/
     ├── brew/
+    ├── firefox/
+    ├── thunderbird/
     └── reports/
 ```
 

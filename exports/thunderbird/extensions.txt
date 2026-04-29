@@ -1,0 +1,5 @@
+{54e72d7b-ed31-4736-854f-f517358f21ee}  # BiDi Mail UI
+owl@beonex.com  # Owl for Exchange
+eas4tbsync@jobisoft.de  # Provider for Exchange ActiveSync
+sync@opto.one  # Sync for TB
+tbsync@jobisoft.de  # TbSync
