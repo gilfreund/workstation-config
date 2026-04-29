@@ -57,7 +57,7 @@
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
     extended: true
   register: cask_results
-  changed_when: "'already installed' not in cask_results.stderr"
+  changed_when: "cask_results.rc == 0 and 'already installed' not in (cask_results.stderr | default(''))"
   failed_when: false
 
 - name: Remove sudo askpass helper

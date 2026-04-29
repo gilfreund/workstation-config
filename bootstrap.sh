@@ -179,18 +179,22 @@ run_playbook() {
   cd "${REPO_DIR}"
 
   local ask_become=""
+  local pass_file="" vars_file=""
   if [ -n "${BECOME_PASS:-}" ]; then
-    local pass_file
     pass_file=$(mktemp)
     chmod 600 "${pass_file}"
     echo "${BECOME_PASS}" > "${pass_file}"
-    ask_become="--become-password-file=${pass_file}"
+    vars_file=$(mktemp)
+    chmod 600 "${vars_file}"
+    echo "ansible_become_password: '${BECOME_PASS}'" > "${vars_file}"
+    ask_become="--become-password-file=${pass_file} -e @${vars_file}"
   fi
 
   # shellcheck disable=SC2086
   ansible-playbook -i inventory/localhost.yml site.yml ${ask_become} "$@"
   local rc=$?
   [ -n "${pass_file:-}" ] && rm -f "${pass_file}"
+  [ -n "${vars_file:-}" ] && rm -f "${vars_file}"
   return $rc
 }
 
