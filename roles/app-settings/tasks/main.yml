@@ -68,7 +68,7 @@
     {{ playbook_dir }}/files/app-configs/iterm2/com.googlecode.iterm2.plist
   when:
     - app_configs.iterm2 | default(true)
-    - ansible_os_family == "Darwin"
+    - ansible_facts['os_family'] == "Darwin"
     - lookup('fileglob', playbook_dir + '/files/app-configs/iterm2/com.googlecode.iterm2.plist') | length > 0
   changed_when: true
 
@@ -79,7 +79,7 @@
     {{ playbook_dir }}/files/app-configs/hiddenbar/com.dwarvesv.minimalbar.plist
   when:
     - app_configs.hiddenbar | default(true)
-    - ansible_os_family == "Darwin"
+    - ansible_facts['os_family'] == "Darwin"
     - lookup('fileglob', playbook_dir + '/files/app-configs/hiddenbar/com.dwarvesv.minimalbar.plist') | length > 0
   changed_when: true
 
@@ -90,7 +90,7 @@
     {{ playbook_dir }}/files/app-configs/cyberduck/ch.sudo.cyberduck.plist
   when:
     - app_configs.cyberduck | default(true)
-    - ansible_os_family == "Darwin"
+    - ansible_facts['os_family'] == "Darwin"
     - lookup('fileglob', playbook_dir + '/files/app-configs/cyberduck/ch.sudo.cyberduck.plist') | length > 0
   changed_when: true
 

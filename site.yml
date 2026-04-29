@@ -7,7 +7,7 @@
   pre_tasks:
     - name: Display target system info
       ansible.builtin.debug:
-        msg: "Configuring {{ ansible_distribution }} {{ ansible_distribution_version }} ({{ ansible_architecture }})"
+        msg: "Configuring {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }} ({{ ansible_facts['architecture'] }})"
 
   roles:
     - role: dotfiles
@@ -15,15 +15,15 @@
 
     - role: homebrew
       tags: [homebrew]
-      when: ansible_os_family == "Darwin" or homebrew_linux_enabled | default(false)
+      when: ansible_facts['os_family'] == "Darwin" or homebrew_linux_enabled | default(false)
 
     - role: mac-settings
       tags: [mac-settings]
-      when: ansible_os_family == "Darwin"
+      when: ansible_facts['os_family'] == "Darwin"
 
     - role: app-settings
       tags: [app-settings]
 
     - role: debian-common
       tags: [debian]
-      when: ansible_os_family == "Debian"
+      when: ansible_facts['os_family'] == "Debian"

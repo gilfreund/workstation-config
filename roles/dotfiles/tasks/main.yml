@@ -26,6 +26,13 @@
     backup: true
   when: lookup('fileglob', playbook_dir + '/roles/dotfiles/templates/.gitconfig.j2') | length > 0
 
+- name: Ensure gh config directory exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/gh"
+    state: directory
+    owner: "{{ user_name }}"
+    mode: "0755"
+
 - name: Deploy gh hosts.yml from template
   ansible.builtin.template:
     src: gh_hosts.yml.j2
@@ -34,6 +41,13 @@
     mode: "0644"
     backup: true
   when: lookup('fileglob', playbook_dir + '/roles/dotfiles/templates/gh_hosts.yml.j2') | length > 0
+
+- name: Ensure Kiro settings directory exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.kiro/settings"
+    state: directory
+    owner: "{{ user_name }}"
+    mode: "0755"
 
 - name: Deploy Kiro SSH MCP servers from template
   ansible.builtin.template:
@@ -68,7 +82,7 @@
       sed -i '' 's|__USER_HOME__|{{ user_home }}|g' {} +
   loop: "{{ dotfiles_dirs }}"
   changed_when: true
-  when: ansible_os_family == "Darwin"
+  when: ansible_facts['os_family'] == "Darwin"
 
 - name: Expand __USER_HOME__ placeholder in copied dotfiles (Linux)
   ansible.builtin.shell: |
@@ -76,7 +90,7 @@
       sed -i 's|__USER_HOME__|{{ user_home }}|g' {} +
   loop: "{{ dotfiles_dirs }}"
   changed_when: true
-  when: ansible_os_family != "Darwin"
+  when: ansible_facts['os_family'] != "Darwin"
 
 # --- .ssh directory (vault-encrypted) ---
 - name: Check if dot_ssh vault exists
