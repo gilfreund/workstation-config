@@ -43,7 +43,15 @@
   community.general.homebrew_cask:
     name: "{{ item }}"
     state: present
+    sudo_password: "{{ ansible_become_password | default(omit) }}"
   loop: "{{ brewfile_casks }}"
   loop_control:
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
     extended: true
+  register: cask_results
+  ignore_errors: true
+
+- name: Report failed cask installs
+  ansible.builtin.debug:
+    msg: "Failed casks (may need sudo — rerun with -K): {{ cask_results.results | selectattr('failed', 'true') | map(attribute='item') | list }}"
+  when: cask_results.results | selectattr('failed', 'true') | list | length > 0
