@@ -49,6 +49,7 @@ app_configs:
   hiddenbar: true
   cyberduck: true
   m365: true
+  thunderbird: true
 
 # Mackup
 mackup_enabled: false
