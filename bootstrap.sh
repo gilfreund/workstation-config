@@ -31,6 +31,7 @@ show_config() {
   echo "Repo:           ${REPO_DIR}"
   echo ""
   echo "--- Prerequisites ---"
+  echo "  Xcode CLI Tools:  $(xcode-select -p &>/dev/null && echo 'installed' || echo 'will install')"
   echo "  Homebrew:         $(command -v brew &>/dev/null && echo 'installed' || echo 'will install')"
   echo "  Python3:          $(command -v python3 &>/dev/null && echo 'installed' || echo 'will install')"
   echo "  Ansible:          $(command -v ansible &>/dev/null && ansible --version | head -1 || echo 'will install')"
@@ -95,12 +96,33 @@ install_homebrew() {
 bootstrap_macos() {
   log "Bootstrapping macOS..."
 
-  # Xcode CLI tools (needed for git, compilers)
+  # Xcode CLI tools (needed for git, compilers, Homebrew)
   if ! xcode-select -p &>/dev/null; then
     log "Installing Xcode Command Line Tools..."
-    xcode-select --install
-    log "Waiting for Xcode CLI tools installation — press Enter when done."
-    read -r
+    # Use softwareupdate for non-interactive install when possible
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    local cli_pkg
+    cli_pkg=$(softwareupdate -l 2>/dev/null \
+      | grep -o '.*Command Line Tools.*' \
+      | grep -v 'Finding' \
+      | sed 's/^[* ]*//' \
+      | sort -V \
+      | tail -1)
+    if [[ -n "${cli_pkg}" ]]; then
+      log "Found package: ${cli_pkg}"
+      softwareupdate -i "${cli_pkg}" --verbose
+    else
+      # Fallback to GUI prompt
+      xcode-select --install
+      log "Waiting for Xcode CLI tools installation to complete..."
+      until xcode-select -p &>/dev/null; do
+        sleep 5
+      done
+    fi
+    rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    log "Xcode Command Line Tools installed."
+  else
+    log "Xcode Command Line Tools already installed."
   fi
 
   install_homebrew
