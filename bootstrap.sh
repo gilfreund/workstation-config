@@ -178,10 +178,20 @@ run_playbook() {
   log "Running Ansible playbook..."
   cd "${REPO_DIR}"
 
-  local ask_become="-K"
+  local ask_become=""
+  if [ -n "${BECOME_PASS:-}" ]; then
+    local pass_file
+    pass_file=$(mktemp)
+    chmod 600 "${pass_file}"
+    echo "${BECOME_PASS}" > "${pass_file}"
+    ask_become="--become-password-file=${pass_file}"
+  fi
 
   # shellcheck disable=SC2086
   ansible-playbook -i inventory/localhost.yml site.yml ${ask_become} "$@"
+  local rc=$?
+  [ -n "${pass_file:-}" ] && rm -f "${pass_file}"
+  return $rc
 }
 
 # --- Main ---
@@ -200,6 +210,10 @@ done
 
 PLATFORM="$(detect_platform)"
 log "Detected platform: ${PLATFORM}"
+
+# Prompt for sudo password once, reuse for bootstrap and Ansible
+read -rsp "[bootstrap] BECOME password (sudo): " BECOME_PASS
+echo
 if [[ "${DRY_RUN}" == "true" ]]; then
   log "*** DRY RUN — bootstrap will install prerequisites but playbook runs in check mode ***"
 fi
