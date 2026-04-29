@@ -90,7 +90,7 @@ brew "starship"
 # Tool to impose load on and stress test a computer system
 brew "stress"
 # Easiest, most secure way to use WireGuard and 2FA
-brew "tailscale", link: false
+brew "tailscale"
 # User interface to the TELNET protocol
 brew "telnet"
 # Extremely fast Python package installer and resolver, written in Rust
@@ -107,6 +107,8 @@ brew "aws/tap/aws-simple-ec2-cli"
 brew "jeffreywildman/virt-manager/virt-viewer"
 # Official Amazon AWS session manager plugin
 brew "syncdk/aws-session-manager-plugin/aws-session-manager-plugin"
+# View, print, and comment on PDF documents
+cask "adobe-acrobat-reader"
 # Android SDK component
 cask "android-platform-tools"
 # Allows connection to a computer remotely

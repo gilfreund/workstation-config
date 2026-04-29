@@ -103,6 +103,8 @@
         "Boto",
         "CUDA",
         "cwagent",
+        "emendobio",
+        "gilf",
         "shellcheck",
         "Stackname",
         "VCPU",

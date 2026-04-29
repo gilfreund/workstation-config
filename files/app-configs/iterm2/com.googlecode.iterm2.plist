@@ -963,12 +963,12 @@
 	</array>
 	<key>NoSyncAllAppVersions</key>
 	<array>
-		<string>3.6.8</string>
+		<string>3.6.6</string>
 		<string>3.4.19</string>
 		<string>3.4.16</string>
 		<string>3.6.9</string>
 		<string>3.5.14</string>
-		<string>3.6.6</string>
+		<string>3.6.8</string>
 	</array>
 	<key>NoSyncFrame_SessionsPreferences</key>
 	<dict>
@@ -995,7 +995,7 @@
 	<key>NoSyncLastSystemPythonVersionRequirement</key>
 	<string>1.17</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>131</integer>
+	<integer>132</integer>
 	<key>NoSyncNeverAskAboutMouseReportingFrustration</key>
 	<true/>
 	<key>NoSyncNeverAskAboutSettingAlternateMouseScroll</key>
