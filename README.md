@@ -228,7 +228,9 @@ After the bootstrap completes, these steps require manual action:
    - Karabiner-Elements (keyboard remapping)
    - macFUSE (filesystem extensions)
    - Tailscale / NetBird / OpenVPN (network extensions)
-6. **Restart** to apply all macOS settings (Dock, Finder, trackpad, keyboard)
+6. **Configure Login Items** (System Settings → General → Login Items) — Hidden Bar, Karabiner-Elements, Tailscale, etc. (SIP-protected, cannot be migrated)
+7. **Configure Notification settings** per app (System Settings → Notifications) — SIP-protected, cannot be migrated
+8. **Restart** to apply all macOS settings (Dock, Finder, trackpad, keyboard)
 
 ## Caveats
 
