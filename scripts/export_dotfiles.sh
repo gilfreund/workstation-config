@@ -70,6 +70,7 @@ DIRS=(
   .config/karabiner
   .aws
   .kiro
+  bin
 )
 
 # Patterns to EXCLUDE from directory copies (glob patterns relative to source dir)
