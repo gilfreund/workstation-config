@@ -104,6 +104,7 @@
     - { domain: "com.microsoft.teams" }
     - { domain: "com.microsoft.teams2" }
     - { domain: "com.microsoft.Outlook" }
+    - { domain: "com.microsoft.OneDrive" }
   loop_control:
     label: "{{ item.domain }}"
   when:

@@ -207,6 +207,7 @@ M365_DOMAINS=(
   "com.microsoft.teams"
   "com.microsoft.teams2"
   "com.microsoft.Outlook"
+  "com.microsoft.OneDrive"
 )
 for domain in "${M365_DOMAINS[@]}"; do
   plist="${HOME_DIR}/Library/Preferences/${domain}.plist"
