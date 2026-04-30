@@ -153,6 +153,37 @@
         path: /tmp/.dot_ssh_restore.tar
         state: absent
 
+# --- Merge known_hosts from source ---
+- name: Merge source known_hosts into target
+  when: lookup('fileglob', playbook_dir + '/files/secrets/ssh_known_hosts.vault') | length > 0
+  block:
+    - name: Decrypt source known_hosts
+      ansible.builtin.copy:
+        src: "secrets/ssh_known_hosts.vault"
+        dest: "/tmp/.source_known_hosts"
+        owner: "{{ user_name }}"
+        mode: "0600"
+
+    - name: Ensure target known_hosts exists
+      ansible.builtin.file:
+        path: "{{ user_home }}/.ssh/known_hosts"
+        state: touch
+        owner: "{{ user_name }}"
+        mode: "0644"
+
+    - name: Append new entries from source known_hosts
+      ansible.builtin.shell: |
+        while IFS= read -r line; do
+          host=$(echo "$line" | awk '{print $1}')
+          grep -qF "$host" "{{ user_home }}/.ssh/known_hosts" || echo "$line" >> "{{ user_home }}/.ssh/known_hosts"
+        done < /tmp/.source_known_hosts
+      changed_when: true
+
+    - name: Clean up temp known_hosts
+      ansible.builtin.file:
+        path: /tmp/.source_known_hosts
+        state: absent
+
 # --- AWS ---
 - name: Ensure .aws directory has correct permissions
   ansible.builtin.file:

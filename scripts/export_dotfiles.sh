@@ -277,6 +277,12 @@ SSH_VAULT="${SECRETS_DIR}/dot_ssh.vault"
 if [[ -d "${SSH_SRC}" ]] && [[ -n "$(ls -A "${SSH_SRC}" 2>/dev/null)" ]]; then
   run tar cf "${SSH_VAULT}" -C "${HOME_DIR}" --exclude='.ssh/known_hosts' --exclude='.ssh/known_hosts.old' .ssh
   encrypt_vault "${SSH_VAULT}" ".ssh/ → ${SSH_VAULT}"
+  # Export known_hosts separately for merge (not overwrite) on target
+  if [[ -f "${HOME_DIR}/.ssh/known_hosts" ]]; then
+    local KH_VAULT="${SECRETS_DIR}/ssh_known_hosts.vault"
+    run cp "${HOME_DIR}/.ssh/known_hosts" "${KH_VAULT}"
+    encrypt_vault "${KH_VAULT}" ".ssh/known_hosts → ${KH_VAULT}"
+  fi
 else
   warn "  ✗ .ssh/ not found or empty, skipping."
 fi
