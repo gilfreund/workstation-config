@@ -280,8 +280,24 @@ if [[ -d "${SSH_SRC}" ]] && [[ -n "$(ls -A "${SSH_SRC}" 2>/dev/null)" ]]; then
   # Export known_hosts separately for merge (not overwrite) on target
   if [[ -f "${HOME_DIR}/.ssh/known_hosts" ]]; then
     local KH_VAULT="${SECRETS_DIR}/ssh_known_hosts.vault"
-    run cp "${HOME_DIR}/.ssh/known_hosts" "${KH_VAULT}"
-    encrypt_vault "${KH_VAULT}" ".ssh/known_hosts → ${KH_VAULT}"
+    # Remove i-* (EC2 instance) entries and any hosts sharing the same keys
+    local KH_TMP
+    KH_TMP=$(mktemp)
+    # Collect keys used by i-* entries
+    local KEYS_TMP
+    KEYS_TMP=$(mktemp)
+    grep '^i-' "${HOME_DIR}/.ssh/known_hosts" | awk '{print $3}' | sort -u > "${KEYS_TMP}"
+    # Filter out i-* entries and any line whose key matches an i-* key
+    while IFS= read -r line; do
+      key=$(echo "$line" | awk '{print $3}')
+      if [[ "$line" != i-* ]] && ! grep -qxF "$key" "${KEYS_TMP}"; then
+        echo "$line"
+      fi
+    done < "${HOME_DIR}/.ssh/known_hosts" > "${KH_TMP}"
+    local removed=$(( $(wc -l < "${HOME_DIR}/.ssh/known_hosts") - $(wc -l < "${KH_TMP}") ))
+    run cp "${KH_TMP}" "${KH_VAULT}"
+    rm -f "${KH_TMP}" "${KEYS_TMP}"
+    encrypt_vault "${KH_VAULT}" ".ssh/known_hosts → ${KH_VAULT} (${removed} ephemeral entries removed)"
   fi
 else
   warn "  ✗ .ssh/ not found or empty, skipping."
