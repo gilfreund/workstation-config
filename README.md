@@ -216,7 +216,7 @@ After the bootstrap completes, these steps require manual action:
 
 1. **Sign into Apple ID** (System Settings → Apple ID) — enables iCloud Keychain sync for passwords, Wi-Fi credentials, and Safari data
 2. **Sign into apps** — account sessions cannot be migrated automatically:
-   - Microsoft Teams / Office / Outlook
+   - Microsoft 365: sign into **one** app (e.g. Teams) per account — other M365 apps (Office, Outlook, OneDrive) will pick up the session via Enterprise SSO. Repeat for each M365 account (personal, work, etc.)
    - Firefox (Sync)
    - Thunderbird (mail accounts)
    - Signal (requires phone to re-link)
