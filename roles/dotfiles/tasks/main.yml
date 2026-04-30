@@ -231,6 +231,30 @@
     backup: true
   when: lookup('fileglob', playbook_dir + '/files/secrets/rclone_conf.vault') | length > 0
 
+# --- .zsh_history (vault-encrypted, append to existing) ---
+- name: Deploy vault-encrypted zsh history
+  when: lookup('fileglob', playbook_dir + '/files/secrets/zsh_history.vault') | length > 0
+  block:
+    - name: Decrypt zsh history to temp
+      ansible.builtin.copy:
+        src: "secrets/zsh_history.vault"
+        dest: "/tmp/.source_zsh_history"
+        owner: "{{ user_name }}"
+        mode: "0600"
+
+    - name: Append source history to target (skip duplicates)
+      ansible.builtin.shell: |
+        target="{{ user_home }}/.zsh_history"
+        touch "$target"
+        cat /tmp/.source_zsh_history >> "$target"
+        sort -u -o "$target" "$target"
+      changed_when: true
+
+    - name: Clean up temp history
+      ansible.builtin.file:
+        path: /tmp/.source_zsh_history
+        state: absent
+
 # --- .secrets directory ---
 - name: Check if dot_secrets vault exists
   ansible.builtin.stat:

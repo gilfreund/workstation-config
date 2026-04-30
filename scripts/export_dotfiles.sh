@@ -332,6 +332,16 @@ else
 fi
 fi
 
+# .zsh_history (vault-encrypted, may contain sensitive commands)
+ZSH_HIST="${HOME_DIR}/.zsh_history"
+ZSH_HIST_VAULT="${SECRETS_DIR}/zsh_history.vault"
+if [[ -f "${ZSH_HIST}" ]]; then
+  run cp "${ZSH_HIST}" "${ZSH_HIST_VAULT}"
+  encrypt_vault "${ZSH_HIST_VAULT}" ".zsh_history → ${ZSH_HIST_VAULT}"
+else
+  warn "  ✗ .zsh_history not found, skipping."
+fi
+
 # .secrets directory (tar + vault)
 if [[ "${EXPORT_SECRETS_VAULT:-true}" == "true" ]]; then
 SECRETS_VAULT="${SECRETS_DIR}/dot_secrets.vault"
