@@ -64,3 +64,18 @@ log "  → ${EXPORT_DIR}/taps.txt"
 
 log "Done. Brewfile is the canonical restore artifact."
 log "Review ${BREWFILE} and remove anything you don't want on a fresh machine."
+
+# Detect which casks require sudo (pkg-based installers)
+log "Detecting casks requiring sudo..."
+SUDO_CASKS="${REPO_DIR}/files/brew_casks_sudo.txt"
+if [[ "${DRY_RUN}" == "true" ]]; then
+  log "  [dry-run] would query cask metadata for pkg detection"
+else
+  : > "${SUDO_CASKS}"
+  while IFS= read -r cask; do
+    if brew info --json=v2 --cask "${cask}" 2>/dev/null | grep -q '"pkg"'; then
+      echo "${cask}" >> "${SUDO_CASKS}"
+    fi
+  done < <(grep '^cask ' "${BREWFILE}" | sed 's/^cask "\([^"]*\)".*/\1/')
+  log "  → ${SUDO_CASKS} ($(wc -l < "${SUDO_CASKS}" | tr -d ' ') casks need sudo)"
+fi

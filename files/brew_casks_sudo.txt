@@ -1,0 +1,15 @@
+adobe-acrobat-reader
+aws-vpn-client
+foxitreader
+karabiner-elements
+macfuse
+microsoft-auto-update
+microsoft-office
+microsoft-teams
+openvpn-connect
+synology-drive
+tailscale-app
+unifi-identity-endpoint
+wifiman
+windows-app
+zoom

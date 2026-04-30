@@ -22,6 +22,14 @@
   ansible.builtin.set_fact:
     brewfile_casks: "{{ lookup('file', homebrew_brewfile).splitlines() | select('match', '^cask ') | map('regex_replace', '^cask \"(.+?)\".*', '\\1') | list }}"
 
+- name: Load pre-built sudo cask list
+  ansible.builtin.set_fact:
+    casks_sudo: "{{ lookup('file', playbook_dir + '/files/brew_casks_sudo.txt', errors='ignore') | default('') | split('\n') | select() | list }}"
+
+- name: Classify casks
+  ansible.builtin.set_fact:
+    casks_nosudo: "{{ brewfile_casks | difference(casks_sudo) }}"
+
 - name: "Add taps ({{ brewfile_taps | length }} total)"
   community.general.homebrew_tap:
     name: "{{ item }}"
@@ -39,64 +47,49 @@
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
     extended: true
 
-# --- Dynamic cask classification ---
-# Query each cask's JSON to detect pkg artifacts (which require sudo)
-- name: Query cask metadata for pkg detection
-  ansible.builtin.shell: >
-    brew info --json=v2 --cask '{{ item }}' 2>/dev/null | grep -q '"pkg"' && echo "pkg" || echo "nopkg"
-  loop: "{{ brewfile_casks }}"
-  loop_control:
-    label: "{{ item }}"
-  register: cask_pkg_check
-  changed_when: false
-  failed_when: false
+- name: Create sudo askpass helper for cask installs
+  ansible.builtin.copy:
+    dest: /tmp/.brew_askpass
+    mode: "0700"
+    content: |
+      #!/bin/bash
+      echo '{{ ansible_become_password }}'
+  when: ansible_become_password is defined
+  no_log: true
 
-- name: Classify casks into sudo and non-sudo groups
-  ansible.builtin.set_fact:
-    casks_sudo: "{{ cask_pkg_check.results | selectattr('stdout', 'eq', 'pkg') | map(attribute='item') | list }}"
-    casks_nosudo: "{{ cask_pkg_check.results | selectattr('stdout', 'eq', 'nopkg') | map(attribute='item') | list }}"
-
-- name: Show cask classification
-  ansible.builtin.debug:
-    msg:
-      - "Casks requiring sudo (pkg): {{ casks_sudo }}"
-      - "Casks without sudo: {{ casks_nosudo }}"
-
-# --- Install non-sudo casks ---
 - name: "Install casks - no sudo ({{ casks_nosudo | length }} total)"
-  community.general.homebrew_cask:
-    name: "{{ item }}"
-    state: present
+  ansible.builtin.shell: brew install --cask '{{ item }}'
   loop: "{{ casks_nosudo }}"
   loop_control:
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
     extended: true
   register: cask_nosudo_results
+  changed_when: "cask_nosudo_results.rc == 0 and 'already installed' not in (cask_nosudo_results.stderr | default(''))"
   failed_when: false
 
-# --- Install sudo casks ---
 - name: "Install casks - sudo required ({{ casks_sudo | length }} total)"
-  community.general.homebrew_cask:
-    name: "{{ item }}"
-    state: present
-    sudo_password: "{{ ansible_become_password | default(omit) }}"
+  ansible.builtin.shell: brew install --cask '{{ item }}'
+  environment: "{{ {'SUDO_ASKPASS': '/tmp/.brew_askpass'} if ansible_become_password is defined else {} }}"
   loop: "{{ casks_sudo }}"
   loop_control:
     label: "{{ item }} ({{ ansible_loop.index }}/{{ ansible_loop.length }})"
     extended: true
   register: cask_sudo_results
+  changed_when: "cask_sudo_results.rc == 0 and 'already installed' not in (cask_sudo_results.stderr | default(''))"
   failed_when: false
 
-# --- Report any failures ---
-- name: Collect all failed casks
-  ansible.builtin.set_fact:
-    failed_casks: >-
-      {{
-        (cask_nosudo_results.results | default([]) | selectattr('failed', 'true') | map(attribute='item') | list) +
-        (cask_sudo_results.results | default([]) | selectattr('failed', 'true') | map(attribute='item') | list)
-      }}
+- name: Remove sudo askpass helper
+  ansible.builtin.file:
+    path: /tmp/.brew_askpass
+    state: absent
 
 - name: Report failed cask installs
   ansible.builtin.debug:
-    msg: "Failed casks (install manually): {{ failed_casks }}"
-  when: failed_casks | length > 0
+    msg: "Failed casks (install manually): {{ failed_list }}"
+  vars:
+    failed_list: >-
+      {{
+        (cask_nosudo_results.results | default([]) | selectattr('rc', 'ne', 0) | map(attribute='item') | list) +
+        (cask_sudo_results.results | default([]) | selectattr('rc', 'ne', 0) | map(attribute='item') | list)
+      }}
+  when: failed_list | length > 0
