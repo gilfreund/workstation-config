@@ -187,6 +187,20 @@ else
   SKIPPED+=("thunderbird")
 fi
 
+# --- Internet Accounts (macOS) ---
+if [[ "${PLATFORM}" == "Darwin" ]] && [[ "${EXPORT_INTERNET_ACCOUNTS:-true}" == "true" ]]; then
+  log "--- Collecting Internet Accounts inventory ---"
+  if DRY_RUN="${DRY_RUN}" bash "${SCRIPT_DIR}/export_internet_accounts.sh"; then
+    COLLECTED+=("internet-accounts")
+  else
+    SKIPPED+=("internet-accounts")
+  fi
+  echo ""
+else
+  log "Internet Accounts export skipped (not macOS or disabled)."
+  SKIPPED+=("internet-accounts")
+fi
+
 # --- Summary ---
 log "=== Collection Summary ==="
 log ""
