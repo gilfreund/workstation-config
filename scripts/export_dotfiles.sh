@@ -83,6 +83,7 @@ EXCLUDE_PATTERNS=(
   "config"
   "*.sock"
   ".DS_Store"
+  "AppSupport"
   ".cli_bash_history"
   "sessions"
   "ssh-mcp-servers.json"
